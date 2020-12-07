@@ -6,9 +6,25 @@ on:
     - "v*"
 
 jobs:
-  Build:
+  test:
+    name: Test release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Golang
+        uses: actions/setup-go@v2
+        with:
+          go-version: "^1.15.5"
+
+      - name: Run tests
+        run: go test ./test
+
+  build:
     name: Build all releases
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

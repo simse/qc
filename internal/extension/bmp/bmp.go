@@ -1,18 +1,18 @@
-package webp
+package bmp
 
 import (
 	"io"
 
-	"github.com/chai2010/webp"
 	"github.com/simse/qc/internal/format"
+	"golang.org/x/image/bmp"
 )
 
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension: "webp",
+		Extension: "bmp",
 		Aliases:   []string{},
-		HumanName: "webp",
+		HumanName: "bmp",
 		Encoder:   Encode,
 		// Decoder:   Decode,
 	}
@@ -25,7 +25,7 @@ func Decode() {
 
 // Encode converts a generic image object to a PNG file
 func Encode(writer io.Writer, decodeObject format.DecodeOutput) format.EncodeOutput {
-	writeError := webp.Encode(writer, decodeObject.Image, nil)
+	writeError := bmp.Encode(writer, decodeObject.Image)
 
 	return format.EncodeOutput{
 		Status: writeError == nil,

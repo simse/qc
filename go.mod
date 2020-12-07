@@ -5,7 +5,7 @@ go 1.15
 require (
 	github.com/amarburg/go-fast-png v0.0.0-20170609231517-41e792c58a01
 	github.com/briandowns/spinner v1.12.0
-	github.com/chai2010/webp v1.1.0 // indirect
+	github.com/chai2010/webp v1.1.0
 	github.com/cheggaaa/pb v1.0.29
 	github.com/cheggaaa/pb/v3 v3.0.5 // indirect
 	github.com/fatih/color v1.10.0
@@ -22,6 +22,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/viper v1.7.1 // indirect
 	golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c // indirect
+	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5
 	golang.org/x/sys v0.0.0-20201204225414-ed752295db88 // indirect
 	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
 	golang.org/x/text v0.3.4 // indirect

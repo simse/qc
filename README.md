@@ -8,15 +8,30 @@ A blazing fast, file format conversion CLI tool
 **Convert all files to png**
 `qc png`
 
+
 **Convert all jpg files to png**
 `qc --in jpg --out png`
+
 
 **Convert all ttf files to otf, including subdirectories**
 `qc --in ttf --out otf --recursive`
 
+
 ## Install
 **Windows**
+
 Use choco or something
 
 **Linux/macOS**
+
 Use homebrew!
+
+
+## Supported formats
+
+### Images
+- JPG
+- PNG
+- Webp
+- TIFF
+- BMP
