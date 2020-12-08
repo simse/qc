@@ -45,12 +45,6 @@ jobs:
           GOARCH: amd64
         run: go build -o ./qc-linux-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
-      - name: Build for Linux (386)
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: linux
-          GOARCH: 386
-        run: go build -o ./qc-linux-386 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
       - name: Build for macOS (amd64)
         env:
@@ -66,19 +60,6 @@ jobs:
           GOARCH: amd64
         run: go build -o ./qc-windows-amd64.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
-      - name: Build for Windows (386)
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: windows
-          GOARCH: 386
-        run: go build -o ./qc-windows-386.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
-
-      - name: Build for Windows (arm)
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: windows
-          GOARCH: arm
-        run: go build -o ./qc-windows-arm.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -86,10 +67,7 @@ jobs:
           prerelease: true
           files: |
             qc-linux-amd64
-            qc-linux-386
             qc-darwin-amd64
             qc-windows-amd64.exe
-            qc-windows-386.exe
-            qc-windows-arm.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
