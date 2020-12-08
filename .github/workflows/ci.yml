@@ -1,6 +1,9 @@
 name: CI
 
-on: push
+on:
+  push:
+    tags:
+    - "v*"
 
 jobs:
   test:
@@ -20,10 +23,7 @@ jobs:
 
   build:
     name: Build all releases
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, windows-2019]
+    runs-on: ubuntu-20.04
     needs: test
     steps:
       - name: Checkout code
@@ -41,23 +41,33 @@ jobs:
       - name: Build for Linux (amd64)
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-          OS: ${{ matrix.os }}
           GOOS: linux
           GOARCH: amd64
-        run: go build -o ./qc-${OS}-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+        run: go build -o ./qc-linux-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
-      - uses: actions/upload-artifact@v2
+
+      - name: Build for macOS (amd64)
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+          GOOS: darwin
+          GOARCH: amd64
+        run: go build -o ./qc-darwin-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+
+      - name: Build for Windows (amd64)
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+          GOOS: windows
+          GOARCH: amd64
+        run: go build -o ./qc-windows-amd64.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: qc-${OS}-amd64
-          path: ./qc-${OS}-amd64
-
-      #- name: Release
-      #  uses: softprops/action-gh-release@v1
-      #  with:
-      #    prerelease: true
-      #    files: |
-      #      qc-linux-amd64
-      #      qc-darwin-amd64
-      #      qc-windows-amd64.exe
-      #  env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: true
+          files: |
+            qc-linux-amd64
+            qc-darwin-amd64
+            qc-windows-amd64.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

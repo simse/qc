@@ -13,8 +13,11 @@ func Info() format.Info {
 		Extension: "jpg",
 		Aliases:   []string{"jpeg"},
 		HumanName: "jpg",
+		Library:   "native",
 		// Encoder:   Encode,
-		Decoder: Decode,
+		Decoder:          Decode,
+		EncoderAvailable: true,
+		DecoderAvailable: true,
 	}
 }
 

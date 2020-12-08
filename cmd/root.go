@@ -54,8 +54,17 @@ var rootCmd = &cobra.Command{
 			}
 		}
 
+		// Check cutput format is known
 		if !strategy.KnownExtension(Output) {
 			output.Error("Unknown output format: " + Output)
+			return
+		}
+
+		// Check output format can be encoded
+		outputFormat, _ := strategy.GetFormat(Output)
+
+		if !outputFormat.EncoderAvailable {
+			output.Error("Cannot convert to format: " + Output + ", no encoder available")
 			return
 		}
 
