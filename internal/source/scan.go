@@ -21,7 +21,7 @@ func Scan(root string, recursive bool, filter []string) ([]File, error) {
 
 	for _, file := range files {
 		for _, extension := range filter {
-			if extension == file.Extension {
+			if extension == file.Extension || filter[0] == "*" {
 				filteredFiles = append(filteredFiles, file)
 			}
 		}
@@ -39,14 +39,22 @@ func scanNonRecursively(root string) ([]File, error) {
 		return files, scanError
 	}
 
-	workdir, _ := os.Getwd()
-	fullPath := filepath.Join(workdir, root)
+	//workdir, _ := os.Getwd()
+	//fullPath := filepath.Join(workdir, root)
 
 	for _, f := range fileArray {
 		if !f.IsDir() {
+			// Get extensions
+			var extension string
+			if len(filepath.Ext(f.Name())) < 1 {
+				extension = ""
+			} else {
+				extension = filepath.Ext(f.Name())
+			}
+
 			files = append(files, File{
-				Path:      filepath.Join(fullPath, f.Name()),
-				Extension: filepath.Ext(f.Name())[1:],
+				Path:      filepath.Join(root, f.Name()),
+				Extension: extension,
 				Key:       filepath.Base(f.Name()),
 			})
 		}
@@ -58,13 +66,16 @@ func scanNonRecursively(root string) ([]File, error) {
 func scanRecursively(root string) ([]File, error) {
 	var files []File
 
+	//workdir, _ := os.Getwd()
+	//fullPath := filepath.Join(workdir, root)
+
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
 
 		files = append(files, File{
-			Path:      path,
+			Path:      filepath.Join(root, info.Name()),
 			Extension: filepath.Ext(path)[1:],
 			Key:       filepath.Base(path),
 		})

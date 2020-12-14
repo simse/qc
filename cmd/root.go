@@ -39,36 +39,54 @@ var rootCmd = &cobra.Command{
 		// Get array of input formats
 		inputExtensions := strings.Split(Input, ",")
 
-		for _, inputExtension := range inputExtensions {
-			format, formatError := strategy.GetFormat(inputExtension)
+		// If no input extensions where given assume wildcard
+		if Input == "" {
+			fmt.Println("No input format given, assuming: *")
+			inputExtensions[0] = "*"
+		} else {
+			for _, inputExtension := range inputExtensions {
+				format, formatError := strategy.GetFormat(inputExtension)
 
-			if formatError != nil {
-				output.Error("Unknown input format: " + inputExtension)
-				return
-			}
+				if formatError != nil {
+					output.Error("Unknown input format: " + inputExtension)
+					return
+				}
 
-			// Add format aliases
-			// TODO: disable with --strict
-			for _, formatAlias := range format.Aliases {
-				inputExtensions = append(inputExtensions, formatAlias)
+				// Add format aliases
+				// TODO: disable with --strict
+				for _, formatAlias := range format.Aliases {
+					inputExtensions = append(inputExtensions, formatAlias)
+				}
 			}
 		}
 
 		// Check cutput format is known
-		if !strategy.KnownExtension(Output) {
-			output.Error("Unknown output format: " + Output)
+		if args[0] == "" && Output == "" {
+			output.Error("No output format given, cannot convert to nothing")
+			return
+		}
+
+		var outputFormatString string
+		if Output != "" {
+			outputFormatString = Output
+		} else {
+			outputFormatString = args[0]
+		}
+
+		if !strategy.KnownExtension(Output) && !strategy.KnownExtension(args[0]) {
+			output.Error("Unknown output format: " + outputFormatString)
 			return
 		}
 
 		// Check output format can be encoded
-		outputFormat, _ := strategy.GetFormat(Output)
+		outputFormat, _ := strategy.GetFormat(outputFormatString)
 
 		if !outputFormat.EncoderAvailable {
-			output.Error("Cannot convert to format: " + Output + ", no encoder available")
+			output.Error("Cannot convert to format: " + outputFormatString + ", no encoder available")
 			return
 		}
 
-		outputFormat, formatError := strategy.GetFormat(Output)
+		outputFormat, formatError := strategy.GetFormat(outputFormatString)
 		if formatError != nil {
 			panic(formatError)
 		}
