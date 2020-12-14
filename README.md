@@ -9,6 +9,8 @@ A blazing fast, file format conversion CLI tool
 
 `qc png`
 
+which is an alias of `qc --in * --out png`
+
 
 **Convert all jpg files to png**
 

@@ -9,8 +9,10 @@ require (
 	github.com/cheggaaa/pb v1.0.29
 	github.com/cheggaaa/pb/v3 v3.0.5 // indirect
 	github.com/dsnet/compress v0.0.1 // indirect
+	github.com/equinox-io/equinox v1.2.0
 	github.com/fatih/color v1.10.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/gernest/wow v0.1.0
 	github.com/golang/snappy v0.0.2 // indirect
 	github.com/janeczku/go-spinner v0.0.0-20150530144529-cf8ef1d64394
 	github.com/karalabe/xgo v0.0.0-20191115072854-c5ccff8648a7 // indirect
@@ -36,11 +38,11 @@ require (
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
-	golang.org/x/crypto v0.0.0-20201203163018-be400aefbc4c // indirect
+	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9 // indirect
 	golang.org/x/image v0.0.0-20200927104501-e162460cd6b5
 	golang.org/x/net v0.0.0-20201207224615-747e23833adb // indirect
-	golang.org/x/sys v0.0.0-20201207223542-d4d67f95c62d // indirect
-	golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 // indirect
+	golang.org/x/sys v0.0.0-20201214095126-aec9a390925b // indirect
+	golang.org/x/term v0.0.0-20201210144234-2321bbc49cbf // indirect
 	golang.org/x/text v0.3.4 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
