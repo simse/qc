@@ -34,6 +34,11 @@ jobs:
         with:
           go-version: "^1.15.5"
 
+      - uses: equinox-io/setup-release-tool@v1
+        name: Install Equinox
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -60,6 +65,11 @@ jobs:
           GOARCH: amd64
         run: go build -o ./qc-windows-amd64.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
+      - name: Write Private Key to file
+        run: echo "${{ secrets.EQUINOX_SIGNING_KEY }}" >> ./equinox.key
+
+      - name: Release to Equinox
+        run: equinox release --version="${{ steps.get_version.outputs.VERSION }}" --platforms="darwin_amd64 linux_amd64 windows_amd64" --signing-key=equinox.key --app="${{ secrets.EQUINOX_APP }}" --token="${{ secrets.EQUINOX_SECRET }}" github.com/simse/qc
 
       - name: Release to Github
         uses: softprops/action-gh-release@v1
@@ -71,14 +81,3 @@ jobs:
             qc-windows-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - uses: equinox-io/setup-release-tool@v1
-        name: Install Equinox
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
-
-      - name: Write Private Key to file
-        run: echo "${EQUINOX_SIGNING_KEY}" >> ./equinox.key
-
-      - name: Release to Equinox
-        run: equinox release --version "${VERSION}" --platforms "darwin_amd64 linux_amd64 windows_amd64" --signing-key=equinox.key --app="${EQUINOX_APP}" --token="${EQUINOX_SECRET}" github.com/simse/qc
