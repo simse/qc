@@ -61,7 +61,7 @@ jobs:
         run: go build -o ./qc-windows-amd64.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
 
 
-      - name: Release
+      - name: Release to Github
         uses: softprops/action-gh-release@v1
         with:
           prerelease: true
@@ -71,3 +71,12 @@ jobs:
             qc-windows-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: equinox-io/setup-release-tool@v1
+        name: Install Equinox
+
+      - name: Write Private Key to file
+        run: echo "${EQUINOX_SIGNING_KEY}" >> ./equinox.key
+
+      - name: Release to Equinox
+        run: equinox release --version "${VERSION}" --platforms "darwin_amd64 linux_amd64 windows_amd64" --signing-key=equinox.key --app="${EQUINOX_APP}" --token="${EQUINOX_SECRET}" github.com/simse/qc

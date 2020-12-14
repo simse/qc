@@ -10,11 +10,11 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension: "jpg",
-		Aliases:   []string{"jpeg"},
-		HumanName: "jpg",
-		Library:   "native",
-		// Encoder:   Encode,
+		Extension:        "jpg",
+		Aliases:          []string{"jpeg"},
+		HumanName:        "jpg",
+		Library:          "native",
+		Encoder:          Encode,
 		Decoder:          Decode,
 		EncoderAvailable: true,
 		DecoderAvailable: true,
@@ -34,6 +34,10 @@ func Decode(reader io.Reader) format.DecodeOutput {
 }
 
 // Encode converts a generic image object to a JPG file
-func Encode() {
+func Encode(writer io.Writer, decodeInfo format.DecodeOutput) format.EncodeOutput {
+	encodeError := jpeg.Encode(writer, decodeInfo.Image, nil)
 
+	return format.EncodeOutput{
+		Status: encodeError == nil,
+	}
 }

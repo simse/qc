@@ -13,7 +13,7 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 
 	if Version == "" {
-		Version = "dev"
+		Version = "good question"
 	}
 }
 
