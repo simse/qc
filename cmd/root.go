@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 	"strings"
 	"sync"
 
@@ -61,7 +62,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Check cutput format is known
-		if args[0] == "" && Output == "" {
+		if len(args) == 0 && Output == "" {
 			output.Error("No output format given, cannot convert to nothing")
 			return
 		}
@@ -94,6 +95,9 @@ var rootCmd = &cobra.Command{
 		// Check for runtime flags
 
 		// Check for and verify format flags
+
+		// Convert path to usable path (relative to absolute)
+		Directory, _ = filepath.Abs(Directory)
 
 		files, scanError := source.Scan(Directory, Recursive, inputExtensions)
 		if scanError != nil {

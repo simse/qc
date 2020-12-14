@@ -49,7 +49,7 @@ func scanNonRecursively(root string) ([]File, error) {
 			if len(filepath.Ext(f.Name())) < 1 {
 				extension = ""
 			} else {
-				extension = filepath.Ext(f.Name())
+				extension = filepath.Ext(f.Name())[1:]
 			}
 
 			files = append(files, File{
@@ -74,9 +74,17 @@ func scanRecursively(root string) ([]File, error) {
 			return nil
 		}
 
+		// Get extensions
+		var extension string
+		if len(filepath.Ext(info.Name())) < 1 {
+			extension = ""
+		} else {
+			extension = filepath.Ext(info.Name())[1:]
+		}
+
 		files = append(files, File{
 			Path:      filepath.Join(root, info.Name()),
-			Extension: filepath.Ext(path)[1:],
+			Extension: extension,
 			Key:       filepath.Base(path),
 		})
 
