@@ -74,6 +74,8 @@ jobs:
 
       - uses: equinox-io/setup-release-tool@v1
         name: Install Equinox
+        env:
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
       - name: Write Private Key to file
         run: echo "${EQUINOX_SIGNING_KEY}" >> ./equinox.key
