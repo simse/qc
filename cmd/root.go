@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"sync"
 
 	"github.com/cheggaaa/pb"
+	"github.com/korovkin/limiter"
 	"github.com/simse/qc/internal/output"
 	"github.com/simse/qc/internal/strategy"
 
@@ -107,19 +107,16 @@ var rootCmd = &cobra.Command{
 		conversions := convert.PrepareAll(files, outputFormat)
 
 		bar := pb.StartNew(len(conversions))
-		var wg sync.WaitGroup
+		limit := limiter.NewConcurrencyLimiter(50)
 
 		for _, conversion := range conversions {
-			wg.Add(1)
-
-			go func(conversion convert.Conversion) {
+			limit.Execute(func() {
 				convert.Do(conversion)
 				bar.Increment()
-				wg.Done()
-			}(conversion)
+			})
 		}
 
-		wg.Wait()
+		limit.Wait()
 		bar.Finish()
 
 		output.Success("Converted " + fmt.Sprint(len(conversions)) + " files")
