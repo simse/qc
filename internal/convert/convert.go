@@ -84,16 +84,36 @@ func PrepareAll(files []source.File, outputFormat format.Info) []Conversion {
 
 // NewPath creates a new path for a file after conversion
 func NewPath(filePath string, inputFormat format.Info, outputFormat format.Info) string {
-	trimmedString := strings.TrimSuffix(filePath, inputFormat.Extension)
+	extension := source.GetExtension(filePath, false)
+	/*extensionLower := strings.ToLower(extension)
+	wasUpperCase := false
 
-	// trimmedString will be unchanged if suffix wasn't there, try aliases instead
-	for _, alias := range inputFormat.Aliases {
-		if trimmedString != filePath {
+	if extension != extensionLower {
+		extension = extensionLower
+		wasUpperCase = true
+	}*/
+	extensionInstances := strings.Count(filePath, extension)
+
+	/*fmt.Println(extension)
+	fmt.Println(extensionInstances)
+	fmt.Println(replaceNth(filePath, extension, outputFormat.Extension, extensionInstances))*/
+
+	return replaceNth(filePath, extension, outputFormat.Extension, extensionInstances)
+}
+
+// Replace the nth occurrence of old in s by new.
+func replaceNth(s, old, new string, n int) string {
+	i := 0
+	for m := 1; m <= n; m++ {
+		x := strings.Index(s[i:], old)
+		if x < 0 {
 			break
 		}
-
-		trimmedString = strings.TrimSuffix(filePath, alias)
+		i += x
+		if m == n {
+			return s[:i] + new + s[i+len(old):]
+		}
+		i += len(old)
 	}
-
-	return (trimmedString + outputFormat.Extension)
+	return s
 }

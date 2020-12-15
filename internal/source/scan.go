@@ -20,6 +20,8 @@ func Scan(root string, recursive bool, filter []string) ([]File, error) {
 		files, fileError = scanNonRecursively(root)
 	}
 
+	// TODO: Add subtract filters i.e. "-jpg"
+
 	for _, file := range files {
 		for _, extension := range filter {
 			if extension == file.Extension || filter[0] == "*" {
@@ -47,7 +49,7 @@ func scanNonRecursively(root string) ([]File, error) {
 		if !f.IsDir() {
 			files = append(files, File{
 				Path:      filepath.Join(root, f.Name()),
-				Extension: getExtension(f),
+				Extension: GetExtension(f.Name(), true),
 				Key:       filepath.Base(f.Name()),
 			})
 		}
@@ -69,7 +71,7 @@ func scanRecursively(root string) ([]File, error) {
 
 		files = append(files, File{
 			Path:      filepath.Join(root, info.Name()),
-			Extension: getExtension(info),
+			Extension: GetExtension(info.Name(), true),
 			Key:       filepath.Base(path),
 		})
 
@@ -87,13 +89,19 @@ func scanRecursively(root string) ([]File, error) {
 	return files, nil
 }
 
-func getExtension(info os.FileInfo) string {
+// GetExtension returns file extension given just file name or full path.
+// hey, it's a free country (maybe?) do what you want
+func GetExtension(name string, lowercase bool) string {
 	var extension string
-	if len(filepath.Ext(info.Name())) < 1 {
+	if len(filepath.Ext(name)) < 1 {
 		extension = ""
 	} else {
-		extension = filepath.Ext(info.Name())[1:]
+		extension = filepath.Ext(name)[1:]
 	}
 
-	return strings.ToLower(extension)
+	if lowercase {
+		return strings.ToLower(extension)
+	}
+
+	return extension
 }

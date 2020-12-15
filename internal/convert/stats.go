@@ -40,6 +40,8 @@ type ConversionResult struct {
 	Duration     int64
 	Error        string
 	Warning      string
+	Errorred     bool
+	Warned       bool
 	Success      bool
 	Skipped      bool
 	SkipReason   string

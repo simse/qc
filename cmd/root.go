@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+	"time"
 
 	"github.com/gernest/wow"
 	"github.com/gernest/wow/spin"
@@ -112,6 +113,9 @@ var rootCmd = &cobra.Command{
 		spinner := wow.New(os.Stdout, spin.Get(spin.Dots), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
 		var wg sync.WaitGroup
 
+		// Start convert timer
+		conversionStart := time.Now()
+
 		spinner.Start()
 		for _, conversion := range conversions {
 			wg.Add(1)
@@ -126,6 +130,9 @@ var rootCmd = &cobra.Command{
 		wg.Wait()
 		spinner.Persist()
 		fmt.Print("\n")
+
+		// Stop conversion timer
+		elapsed := time.Since(conversionStart)
 
 		// Calculate conversion statistics
 		skipped := 0
@@ -145,7 +152,7 @@ var rootCmd = &cobra.Command{
 		if skipped > 0 {
 			fmt.Println("Skipped " + fmt.Sprint(skipped) + " files")
 		}
-		output.Success("Converted " + fmt.Sprint(succeeded) + " files")
+		output.Success("Converted " + fmt.Sprint(succeeded) + " files in " + fmt.Sprint(elapsed))
 	},
 }
 
