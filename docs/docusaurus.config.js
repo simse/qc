@@ -22,7 +22,7 @@ module.exports = {
           label: 'Docs',
           position: 'left',
         },
-        {to: 'blog', label: 'Blog', position: 'left'},
+        /*{to: 'blog', label: 'Blog', position: 'left'},*/
         {
           href: 'https://github.com/simse/qc',
           label: 'GitHub',
@@ -40,13 +40,13 @@ module.exports = {
               label: 'Style Guide',
               to: 'docs/',
             },
-            {
+            /*{
               label: 'Second Doc',
               to: 'docs/doc2/',
-            },
+            },*/
           ],
         },
-        {
+       /* {
           title: 'Community',
           items: [
             {
@@ -62,17 +62,17 @@ module.exports = {
               href: 'https://twitter.com/docusaurus',
             },
           ],
-        },
+        },*/
         {
           title: 'More',
           items: [
-            {
+            /*{
               label: 'Blog',
               to: 'blog',
-            },
+            },*/
             {
               label: 'GitHub',
-              href: 'https://github.com/facebook/docusaurus',
+              href: 'https://github.com/simse/qc',
             },
           ],
         },
