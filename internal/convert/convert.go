@@ -33,10 +33,24 @@ func Do(conversion Conversion) ConversionResult {
 		}
 	}
 
+	// Check if result exists
+	outputFile, fileOpenError := os.Open(conversion.OutputPath)
+	if fileOpenError == nil {
+		outputFile.Close()
+
+		return ConversionResult{
+			Skipped:    true,
+			SkipReason: "result exists",
+		}
+	}
+
 	// Create file reader
 	fileSource, fileSourceError := os.Open(conversion.InputPath)
 	if fileSourceError != nil {
-		panic(fileSourceError)
+		return ConversionResult{
+			Error:   fileSourceError.Error(),
+			Errored: true,
+		}
 	}
 	defer fileSource.Close()
 
@@ -45,14 +59,18 @@ func Do(conversion Conversion) ConversionResult {
 
 	if standardObjectError != nil {
 		return ConversionResult{
-			Error: standardObjectError.Error(),
+			Error:   standardObjectError.Error(),
+			Errored: true,
 		}
 	}
 
 	// Create file writer
 	fileDestination, fileDestinationError := os.Create(conversion.OutputPath)
 	if fileDestinationError != nil {
-		panic(fileDestinationError)
+		return ConversionResult{
+			Error:   fileDestinationError.Error(),
+			Errored: true,
+		}
 	}
 	defer fileDestination.Close()
 

@@ -110,7 +110,7 @@ var rootCmd = &cobra.Command{
 		}
 
 		conversions := convert.PrepareAll(files, outputFormat)
-		var conversionResults []convert.ConversionResult
+		conversionResults := make(chan convert.ConversionResult, len(conversions))
 
 		//bar := pb.StartNew(len(conversions))
 		spinner := wow.New(os.Stdout, spin.Get(spin.Dots), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
@@ -119,19 +119,31 @@ var rootCmd = &cobra.Command{
 		// Start convert timer
 		conversionStart := time.Now()
 
+		//fmt.Println(len(conversions))
+
 		spinner.Start()
-		for _, conversion := range conversions {
+		for index, conversion := range conversions {
 			wg.Add(1)
 
-			go func(conversion convert.Conversion) {
-				conversionResults = append(conversionResults, convert.Do(conversion))
+			go func(conversion convert.Conversion, wg *sync.WaitGroup, spinner *wow.Wow, index int) {
+				defer wg.Done()
+
+				//conversionResult := convert.Do(conversion)
+
+				// fmt.Println(index)
+
+				conversionResults <- convert.Do(conversion)
 				spinner.Text(" (" + fmt.Sprint(len(conversionResults)) + "/" + fmt.Sprint(len(conversions)) + ") Processing and converting files")
-				wg.Done()
-			}(conversion)
+
+			}(conversion, &wg, spinner, index)
 		}
 
 		wg.Wait()
+		close(conversionResults)
 		spinner.Persist()
+
+		//fmt.Println(len(conversionResults))
+
 		fmt.Print("\n")
 
 		// Stop conversion timer
@@ -139,9 +151,13 @@ var rootCmd = &cobra.Command{
 
 		// Calculate conversion statistics
 		skipped := 0
+		errored := 0
+		warned := 0
 		succeeded := 0
 
-		for _, conversionResult := range conversionResults {
+		for conversionResult := range conversionResults {
+			// fmt.Println(conversionResult)
+
 			if conversionResult.Skipped {
 				skipped++
 			}
@@ -149,11 +165,25 @@ var rootCmd = &cobra.Command{
 			if conversionResult.Success {
 				succeeded++
 			}
+
+			if conversionResult.Warned {
+				warned++
+			}
+
+			if conversionResult.Errored {
+				errored++
+			}
 		}
 
 		// Output conversion statistics
 		if skipped > 0 {
-			fmt.Println("Skipped " + fmt.Sprint(skipped) + " files")
+			fmt.Println(fmt.Sprint(skipped) + " files skipped")
+		}
+		if warned > 0 {
+			fmt.Println(fmt.Sprint(warned) + " conversions resulted in warnings")
+		}
+		if errored > 0 {
+			fmt.Println(fmt.Sprint(errored) + " errors")
 		}
 		output.Success("Converted " + fmt.Sprint(succeeded) + " files in " + fmt.Sprint(elapsed))
 	},
