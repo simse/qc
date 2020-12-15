@@ -94,6 +94,9 @@ var rootCmd = &cobra.Command{
 			panic(formatError)
 		}
 
+		// Add output format as a negative filter in folder scan
+		inputExtensions = append(inputExtensions, "-"+outputFormatString)
+
 		// Check for runtime flags
 
 		// Check for and verify format flags

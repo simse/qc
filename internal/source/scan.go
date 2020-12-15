@@ -20,10 +20,14 @@ func Scan(root string, recursive bool, filter []string) ([]File, error) {
 		files, fileError = scanNonRecursively(root)
 	}
 
-	// TODO: Add subtract filters i.e. "-jpg"
-
 	for _, file := range files {
 		for _, extension := range filter {
+			if extension[0] == '-' {
+				if trimFirstRune(extension) == file.Extension {
+					continue
+				}
+			}
+
 			if extension == file.Extension || filter[0] == "*" {
 				filteredFiles = append(filteredFiles, file)
 			}
@@ -104,4 +108,16 @@ func GetExtension(name string, lowercase bool) string {
 	}
 
 	return extension
+}
+
+func trimFirstRune(s string) string {
+	for i := range s {
+		if i > 0 {
+			// The value i is the index in s of the second
+			// rune.  Slice to remove the first rune.
+			return s[i:]
+		}
+	}
+	// There are 0 or 1 runes in the string.
+	return ""
 }
