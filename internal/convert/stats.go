@@ -42,6 +42,7 @@ type ConversionResult struct {
 	Warning      string
 	Success      bool
 	Skipped      bool
+	SkipReason   string
 	InputSize    int64
 	OutputSize   int64
 }

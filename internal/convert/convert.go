@@ -20,6 +20,19 @@ type Conversion struct {
 
 // Do completes a conversion given input path, output path, input format and output format
 func Do(conversion Conversion) ConversionResult {
+	// Check if conversion is possible
+	// if not, it's not an error
+	// the conversion command has already been verified
+	// mark as a skip instead of error
+	canConvert, _ := strategy.VerifyConversion(conversion.InputFormat, conversion.OutputFormat)
+
+	if !canConvert {
+		return ConversionResult{
+			Skipped:    true,
+			SkipReason: "no strategy available",
+		}
+	}
+
 	// Create file reader
 	fileSource, fileSourceError := os.Open(conversion.InputPath)
 	if fileSourceError != nil {
@@ -50,7 +63,7 @@ func PrepareAll(files []source.File, outputFormat format.Info) []Conversion {
 	conversions := []Conversion{}
 
 	for _, file := range files {
-		inputFormat, _ := strategy.GetFormat(file.Extension)
+		inputFormat, _, _ := strategy.GetFormat(file.Extension)
 
 		conversions = append(conversions, Conversion{
 			InputPath:    file.Path,

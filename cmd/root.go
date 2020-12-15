@@ -8,7 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/cheggaaa/pb"
+	"github.com/gernest/wow"
+	"github.com/gernest/wow/spin"
 	"github.com/simse/qc/internal/output"
 	"github.com/simse/qc/internal/strategy"
 
@@ -46,7 +47,7 @@ var rootCmd = &cobra.Command{
 			inputExtensions[0] = "*"
 		} else {
 			for _, inputExtension := range inputExtensions {
-				format, formatError := strategy.GetFormat(inputExtension)
+				format, _, formatError := strategy.GetFormat(inputExtension)
 
 				if formatError != nil {
 					output.Error("Unknown input format: " + inputExtension)
@@ -80,14 +81,14 @@ var rootCmd = &cobra.Command{
 		}
 
 		// Check output format can be encoded
-		outputFormat, _ := strategy.GetFormat(outputFormatString)
+		outputFormat, _, _ := strategy.GetFormat(outputFormatString)
 
 		if !outputFormat.EncoderAvailable {
 			output.Error("Cannot convert to format: " + outputFormatString + ", no encoder available")
 			return
 		}
 
-		outputFormat, formatError := strategy.GetFormat(outputFormatString)
+		outputFormat, _, formatError := strategy.GetFormat(outputFormatString)
 		if formatError != nil {
 			panic(formatError)
 		}
@@ -105,32 +106,44 @@ var rootCmd = &cobra.Command{
 		}
 
 		conversions := convert.PrepareAll(files, outputFormat)
+		var conversionResults []convert.ConversionResult
 
-		bar := pb.StartNew(len(conversions))
+		//bar := pb.StartNew(len(conversions))
+		spinner := wow.New(os.Stdout, spin.Get(spin.Dots), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
 		var wg sync.WaitGroup
 
 		for _, conversion := range conversions {
 			wg.Add(1)
 
 			go func(conversion convert.Conversion) {
-				convert.Do(conversion)
-				bar.Increment()
+				conversionResults = append(conversionResults, convert.Do(conversion))
+				spinner.Text(" (0/" + fmt.Sprint(conversionResults) + ") Processing and converting files")
 				wg.Done()
 			}(conversion)
 		}
 
 		wg.Wait()
-		bar.Finish()
+		spinner.PersistWith(spin.Spinner{}, "")
 
-		output.Success("Converted " + fmt.Sprint(len(conversions)) + " files")
+		// Calculate conversion statistics
+		skipped := 0
+		succeeded := 0
 
-		//conversionStats := convert.Stats{}
+		for _, conversionResult := range conversionResults {
+			if conversionResult.Skipped {
+				skipped++
+			}
 
-		//fmt.Println(conversionStats)
+			if conversionResult.Success {
+				succeeded++
+			}
+		}
 
-		// fmt.Print(strategy.KnownExtension(Input))
-
-		//output.Warning("Converted 8 files")
+		// Output conversion statistics
+		if skipped > 0 {
+			fmt.Println("Skipped " + fmt.Sprint(skipped) + " files")
+		}
+		output.Success("Converted " + fmt.Sprint(succeeded) + " files")
 	},
 }
 
