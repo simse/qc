@@ -11,7 +11,7 @@ import (
 func Info() format.Info {
 	return format.Info{
 		Extension: "tiff",
-		Aliases:   []string{},
+		Aliases:   []string{"tif"},
 		HumanName: "tiff",
 		Library:   "native",
 		Encoder:   Encode,

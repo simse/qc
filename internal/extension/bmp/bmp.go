@@ -11,7 +11,7 @@ import (
 func Info() format.Info {
 	return format.Info{
 		Extension: "bmp",
-		Aliases:   []string{},
+		Aliases:   []string{"dib"},
 		HumanName: "bmp",
 		Library:   "native",
 		Encoder:   Encode,
