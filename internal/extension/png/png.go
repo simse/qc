@@ -10,20 +10,27 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension: "png",
-		Aliases:   []string{},
-		HumanName: "png",
-		Library:   "native",
-		Encoder:   Encode,
-		// Decoder:   Decode,
+		Extension:        "png",
+		Aliases:          []string{},
+		HumanName:        "png",
+		Library:          "native",
+		Encoder:          Encode,
+		Decoder:          Decode,
 		EncoderAvailable: true,
 		DecoderAvailable: true,
 	}
 }
 
 // Decode converts the PNG image to a generic image object for encoding
-func Decode() {
+func Decode(reader io.Reader) format.DecodeOutput {
+	//imageFile, _ := os.Open(path)
+	//bufferedReader := bufio.NewReader(f)
+	imageObject, _ := fastpng.Decode(reader)
+	// panic(err)
 
+	return format.DecodeOutput{
+		Image: imageObject,
+	}
 }
 
 // Encode converts a generic image object to a PNG file

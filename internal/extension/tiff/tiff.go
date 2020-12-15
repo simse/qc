@@ -21,9 +21,13 @@ func Info() format.Info {
 	}
 }
 
-// Decode converts the PNG image to a generic image object for encoding
-func Decode() {
+// Decode converts the JPG image to a generic image object for encoding
+func Decode(reader io.Reader) format.DecodeOutput {
+	imageObject, _ := tiff.Decode(reader)
 
+	return format.DecodeOutput{
+		Image: imageObject,
+	}
 }
 
 // Encode converts a generic image object to a PNG file

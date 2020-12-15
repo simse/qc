@@ -11,11 +11,11 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension:        "webp",
-		Aliases:          []string{},
-		HumanName:        "webp",
-		Library:          "native",
-		Encoder:          Encode,
+		Extension: "webp",
+		Aliases:   []string{},
+		HumanName: "webp",
+		Library:   "native",
+		//Encoder:          Encode,
 		Decoder:          Decode,
 		EncoderAvailable: false,
 		DecoderAvailable: true,
@@ -34,7 +34,9 @@ func Decode(reader io.Reader) format.DecodeOutput {
 	}
 }
 
+/*
 // Encode converts a generic image object to a PNG file
 func Encode(writer io.Writer, decodeObject format.DecodeOutput) format.EncodeOutput {
 	return format.EncodeOutput{}
 }
+*/
