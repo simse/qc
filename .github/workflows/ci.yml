@@ -74,7 +74,7 @@ jobs:
       - name: Release to Github
         uses: softprops/action-gh-release@v1
         with:
-          prerelease: true
+          prerelease: false
           files: |
             qc-linux-amd64
             qc-darwin-amd64

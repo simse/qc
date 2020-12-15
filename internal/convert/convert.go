@@ -40,7 +40,14 @@ func Do(conversion Conversion) ConversionResult {
 	}
 	defer fileSource.Close()
 
-	// fmt.Print(conversion.InputPath)
+	// Create standard object
+	standardObject, standardObjectError := conversion.InputFormat.Decoder(fileSource)
+
+	if standardObjectError != nil {
+		return ConversionResult{
+			Error: standardObjectError.Error(),
+		}
+	}
 
 	// Create file writer
 	fileDestination, fileDestinationError := os.Create(conversion.OutputPath)
@@ -48,9 +55,6 @@ func Do(conversion Conversion) ConversionResult {
 		panic(fileDestinationError)
 	}
 	defer fileDestination.Close()
-
-	// Create standard object
-	standardObject := conversion.InputFormat.Decoder(fileSource)
 
 	// Write standard object to destination
 	conversion.OutputFormat.Encoder(fileDestination, standardObject)

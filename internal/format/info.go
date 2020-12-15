@@ -8,8 +8,8 @@ type Info struct {
 	Extension        string
 	Aliases          []string
 	HumanName        string
-	Decoder          func(io.Reader) DecodeOutput
-	Encoder          func(io.Writer, DecodeOutput) EncodeOutput
+	Decoder          func(io.Reader) (DecodeOutput, error)
+	Encoder          func(io.Writer, DecodeOutput) (EncodeOutput, error)
 	DecoderAvailable bool
 	EncoderAvailable bool
 }

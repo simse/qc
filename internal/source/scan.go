@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Scan returns all files in directory
@@ -44,17 +45,9 @@ func scanNonRecursively(root string) ([]File, error) {
 
 	for _, f := range fileArray {
 		if !f.IsDir() {
-			// Get extensions
-			var extension string
-			if len(filepath.Ext(f.Name())) < 1 {
-				extension = ""
-			} else {
-				extension = filepath.Ext(f.Name())[1:]
-			}
-
 			files = append(files, File{
 				Path:      filepath.Join(root, f.Name()),
-				Extension: extension,
+				Extension: getExtension(f),
 				Key:       filepath.Base(f.Name()),
 			})
 		}
@@ -74,17 +67,9 @@ func scanRecursively(root string) ([]File, error) {
 			return nil
 		}
 
-		// Get extensions
-		var extension string
-		if len(filepath.Ext(info.Name())) < 1 {
-			extension = ""
-		} else {
-			extension = filepath.Ext(info.Name())[1:]
-		}
-
 		files = append(files, File{
 			Path:      filepath.Join(root, info.Name()),
-			Extension: extension,
+			Extension: getExtension(info),
 			Key:       filepath.Base(path),
 		})
 
@@ -100,4 +85,15 @@ func scanRecursively(root string) ([]File, error) {
 	}
 
 	return files, nil
+}
+
+func getExtension(info os.FileInfo) string {
+	var extension string
+	if len(filepath.Ext(info.Name())) < 1 {
+		extension = ""
+	} else {
+		extension = filepath.Ext(info.Name())[1:]
+	}
+
+	return strings.ToLower(extension)
 }

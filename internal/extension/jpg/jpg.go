@@ -22,7 +22,7 @@ func Info() format.Info {
 }
 
 // Decode converts the JPG image to a generic image object for encoding
-func Decode(reader io.Reader) format.DecodeOutput {
+func Decode(reader io.Reader) (format.DecodeOutput, error) {
 	//imageFile, _ := os.Open(path)
 	//bufferedReader := bufio.NewReader(f)
 	imageObject, _ := jpeg.Decode(reader)
@@ -30,14 +30,14 @@ func Decode(reader io.Reader) format.DecodeOutput {
 
 	return format.DecodeOutput{
 		Image: imageObject,
-	}
+	}, nil
 }
 
 // Encode converts a generic image object to a JPG file
-func Encode(writer io.Writer, decodeInfo format.DecodeOutput) format.EncodeOutput {
+func Encode(writer io.Writer, decodeInfo format.DecodeOutput) (format.EncodeOutput, error) {
 	encodeError := jpeg.Encode(writer, decodeInfo.Image, nil)
 
 	return format.EncodeOutput{
 		Status: encodeError == nil,
-	}
+	}, nil
 }

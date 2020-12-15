@@ -43,7 +43,7 @@ var rootCmd = &cobra.Command{
 
 		// If no input extensions where given assume wildcard
 		if Input == "" {
-			fmt.Println("No input format given, assuming: *")
+			// fmt.Println("No input format given, assuming: *")
 			inputExtensions[0] = "*"
 		} else {
 			for _, inputExtension := range inputExtensions {
@@ -125,6 +125,7 @@ var rootCmd = &cobra.Command{
 
 		wg.Wait()
 		spinner.Persist()
+		fmt.Print("\n")
 
 		// Calculate conversion statistics
 		skipped := 0

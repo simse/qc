@@ -22,19 +22,16 @@ func Info() format.Info {
 }
 
 // Decode converts the PNG image to a generic image object for encoding
-func Decode(reader io.Reader) format.DecodeOutput {
-	//imageFile, _ := os.Open(path)
-	//bufferedReader := bufio.NewReader(f)
+func Decode(reader io.Reader) (format.DecodeOutput, error) {
 	imageObject, _ := fastpng.Decode(reader)
-	// panic(err)
 
 	return format.DecodeOutput{
 		Image: imageObject,
-	}
+	}, nil
 }
 
 // Encode converts a generic image object to a PNG file
-func Encode(writer io.Writer, decodeObject format.DecodeOutput) format.EncodeOutput {
+func Encode(writer io.Writer, decodeObject format.DecodeOutput) (format.EncodeOutput, error) {
 	pngEncoder := fastpng.Encoder{
 		CompressionLevel: fastpng.BestSpeed,
 	}
@@ -43,5 +40,5 @@ func Encode(writer io.Writer, decodeObject format.DecodeOutput) format.EncodeOut
 
 	return format.EncodeOutput{
 		Status: writeError == nil,
-	}
+	}, nil
 }

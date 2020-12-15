@@ -23,7 +23,7 @@ func Info() format.Info {
 }
 
 // Decode converts the PNG image to a generic image object for encoding
-func Decode(reader io.Reader) format.DecodeOutput {
+func Decode(reader io.Reader) (format.DecodeOutput, error) {
 	imageObject, imageReadError := webp.Decode(reader)
 	if imageReadError != nil {
 		panic(imageReadError)
@@ -31,7 +31,7 @@ func Decode(reader io.Reader) format.DecodeOutput {
 
 	return format.DecodeOutput{
 		Image: imageObject,
-	}
+	}, nil
 }
 
 /*
