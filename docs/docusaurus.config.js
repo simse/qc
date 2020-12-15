@@ -1,16 +1,16 @@
 module.exports = {
   title: 'qc',
-  tagline: 'QuickConvert is a tool to convert between file formats',
-  url: 'https://getqc.app',
+  tagline: 'qc is a fast, stable tool for converting between file formats',
+  url: 'https://qc.simse.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'simse', // Usually your GitHub org/user name.
+  projectName: 'qc', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'My Site',
+      title: 'qc',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
@@ -24,7 +24,7 @@ module.exports = {
         },
         {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/facebook/docusaurus',
+          href: 'https://github.com/simse/qc',
           label: 'GitHub',
           position: 'right',
         },
@@ -77,7 +77,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+      copyright: `Copyright © ${new Date().getFullYear()} qc`,
     },
   },
   presets: [
@@ -88,13 +88,13 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/',
+            'https://github.com/simse/qc/edit/master/docs/',
         },
         blog: {
           showReadingTime: true,
           // Please change this to your repo.
           editUrl:
-            'https://github.com/facebook/docusaurus/edit/master/website/blog/',
+            'https://github.com/simse/qc/edit/master/docs/blog',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
