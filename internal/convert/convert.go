@@ -55,7 +55,9 @@ func Do(conversion Conversion) ConversionResult {
 	// Write standard object to destination
 	conversion.OutputFormat.Encoder(fileDestination, standardObject)
 
-	return ConversionResult{}
+	return ConversionResult{
+		Success: true,
+	}
 }
 
 // PrepareAll prepares an array of files for conversion

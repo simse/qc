@@ -112,18 +112,19 @@ var rootCmd = &cobra.Command{
 		spinner := wow.New(os.Stdout, spin.Get(spin.Dots), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
 		var wg sync.WaitGroup
 
+		spinner.Start()
 		for _, conversion := range conversions {
 			wg.Add(1)
 
 			go func(conversion convert.Conversion) {
 				conversionResults = append(conversionResults, convert.Do(conversion))
-				spinner.Text(" (0/" + fmt.Sprint(conversionResults) + ") Processing and converting files")
+				spinner.Text(" (" + fmt.Sprint(len(conversionResults)) + "/" + fmt.Sprint(len(conversions)) + ") Processing and converting files")
 				wg.Done()
 			}(conversion)
 		}
 
 		wg.Wait()
-		spinner.PersistWith(spin.Spinner{}, "")
+		spinner.Persist()
 
 		// Calculate conversion statistics
 		skipped := 0
