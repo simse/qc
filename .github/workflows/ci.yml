@@ -6,8 +6,8 @@ on:
     - "v*"
 
 jobs:
-  test:
-    name: Test release
+  test_source_code:
+    name: Test source code
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -22,9 +22,9 @@ jobs:
         run: go test ./test
 
   build:
-    name: Build all releases
+    name: Build binary
     runs-on: ubuntu-20.04
-    needs: test
+    needs: test_source_code
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,38 +34,47 @@ jobs:
         with:
           go-version: "^1.15.5"
 
-      - uses: equinox-io/setup-release-tool@v1
-        name: Install Equinox
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      #- uses: equinox-io/setup-release-tool@v1
+      #  name: Install Equinox
+      #  env:
+      #    ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
-      - name: Build for Linux (amd64)
+      - name: Build for all platforms
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: linux
-          GOARCH: amd64
-        run: go build -o ./qc-linux-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+        run: bash scripts/cross_compile.sh
 
+      - uses: actions/upload-artifact@v2
+        with:
+          name: qc
+          path: build/
 
-      - name: Build for macOS (amd64)
+  # test_binary:
+  #   name: Test binary
+  #   runs-on: ubuntu-20.04
+      
+
+  release:
+    name: Release qc
+    runs-on: ubuntu-20.04
+    needs: build
+    steps:
+      - uses: equinox-io/setup-release-tool@v1
+        name: Install Equinox
         env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: darwin
-          GOARCH: amd64
-        run: go build -o ./qc-darwin-amd64 -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+          ACTIONS_ALLOW_UNSECURE_COMMANDS: true
 
-      - name: Build for Windows (amd64)
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          GOOS: windows
-          GOARCH: amd64
-        run: go build -o ./qc-windows-amd64.exe -ldflags="-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
-
-      - name: Write Private Key to file
+      - uses: actions/download-artifact@v2
+        name: Download build artifact
+        with:
+          name: qc
+          path: build/
+      
+      - name: Write Equinox key
         run: echo "${{ secrets.EQUINOX_SIGNING_KEY }}" >> ./equinox.key
 
       - name: Release to Equinox
@@ -76,8 +85,8 @@ jobs:
         with:
           prerelease: false
           files: |
-            qc-linux-amd64
-            qc-darwin-amd64
-            qc-windows-amd64.exe
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            build/qc-linux-amd64
+            build/qc-darwin-amd64
+            build/qc-windows-amd64.exe
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
