@@ -113,7 +113,7 @@ var rootCmd = &cobra.Command{
 		conversionResults := make(chan convert.ConversionResult, len(conversions))
 
 		//bar := pb.StartNew(len(conversions))
-		spinner := wow.New(os.Stdout, spin.Get(spin.Dots), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
+		spinner := wow.New(os.Stdout, spin.Get(spin.Line), " (0/"+fmt.Sprint(len(conversions))+") Processing and converting files")
 		var wg sync.WaitGroup
 
 		// Start convert timer
