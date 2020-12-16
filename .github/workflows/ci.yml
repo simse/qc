@@ -1,9 +1,6 @@
 name: CI
 
-on:
-  push:
-    tags:
-    - "v*"
+on: push
 
 jobs:
   test_source_code:
@@ -62,6 +59,7 @@ jobs:
     name: Release qc
     runs-on: ubuntu-20.04
     needs: build
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
       - uses: equinox-io/setup-release-tool@v1
         name: Install Equinox
