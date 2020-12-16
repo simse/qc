@@ -88,5 +88,5 @@ jobs:
             build/qc-linux-amd64
             build/qc-darwin-amd64
             build/qc-windows-amd64.exe
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
