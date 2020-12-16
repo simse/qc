@@ -11,6 +11,7 @@ require (
 	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/equinox-io/equinox v1.2.0
 	github.com/fatih/color v1.10.0
+	github.com/francoispqt/gojay v1.2.13
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/gernest/wow v0.1.0
 	github.com/golang/snappy v0.0.2 // indirect
@@ -41,6 +42,7 @@ require (
 	github.com/spf13/viper v1.7.1 // indirect
 	github.com/ulikunitz/xz v0.5.8 // indirect
 	github.com/valyala/fasttemplate v1.2.1 // indirect
+	github.com/vmihailenco/msgpack/v5 v5.1.0 // indirect
 	github.com/xi2/xz v0.0.0-20171230120015-48954b6210f8 // indirect
 	golang.org/x/crypto v0.0.0-20201208171446-5f87f3452ae9 // indirect
 	golang.org/x/image v0.0.0-20201208152932-35266b937fa6

@@ -69,7 +69,7 @@ jobs:
         run: echo "${{ secrets.EQUINOX_SIGNING_KEY }}" >> ./equinox.key
 
       - name: Release to Equinox
-        run: equinox release --version="${{ steps.get_version.outputs.VERSION }}" --platforms="darwin_amd64 linux_amd64 windows_amd64" --signing-key=equinox.key --app="${{ secrets.EQUINOX_APP }}" --token="${{ secrets.EQUINOX_SECRET }}" github.com/simse/qc
+        run: equinox release --version="${{ steps.get_version.outputs.VERSION }}" --platforms="darwin_amd64 linux_amd64 windows_amd64" --signing-key=equinox.key --app="${{ secrets.EQUINOX_APP }}" --token="${{ secrets.EQUINOX_SECRET }}" -- -ldflags "-X github.com/simse/qc/cmd.Version=${{ steps.get_version.outputs.VERSION }}" github.com/simse/qc
 
       - name: Release to Github
         uses: softprops/action-gh-release@v1
