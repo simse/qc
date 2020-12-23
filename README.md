@@ -1,4 +1,6 @@
 # qc
+![CI](https://github.com/simse/qc/workflows/CI/badge.svg)
+
 A blazing fast, file format conversion CLI tool
 
 **WARNING: qc is not yet released. There may be pre-releases available, but it may not work or break at any point.**

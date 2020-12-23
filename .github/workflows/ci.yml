@@ -35,12 +35,6 @@ jobs:
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
-      - name: Download repo
-        run: aws s3 sync s3:/update-repo/qc ./repo/
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
       - name: Build for all platforms
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
@@ -49,7 +43,7 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: qc
-          path: repo/
+          path: build/
 
   # test_binary:
   #   name: Test binary
@@ -62,32 +56,52 @@ jobs:
     needs: build
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
+      - name: Download repo
+        run: aws s3 sync s3://update-repo/qc ./repo/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
       - uses: actions/download-artifact@v2
         name: Download build artifact
         with:
           name: qc
-          path: repo/
+          path: build/
+
+      - name: Add binaries to repo
+        run: bash scripts/add_to_repo.sh
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Generate repo manifest
+        run: python scripts/generate_repo_manifest.py
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Upload to repo
+        run: aws s3 sync ./repo/ s3://update-repo/qc
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
       - name: Release to Github
         uses: softprops/action-gh-release@v1
         with:
           prerelease: false
           files: |
-            repo/${VERSION}/qc-linux-amd64
-            repo/${VERSION}/qc-darwin-amd64
-            repo/${VERSION}/qc-windows-amd64.exe
+            build/qc-linux-amd64
+            build/qc-darwin-amd64
+            build/qc-windows-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-
-      - name: Upload to repo
-        run: aws s3 sync repo/ s3:/update-repo/qc
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-      
+     
