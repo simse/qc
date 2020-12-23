@@ -61,6 +61,13 @@ jobs:
         with:
           python-version: "3.8"
 
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
@@ -68,8 +75,7 @@ jobs:
       - name: Download repo
         run: aws s3 sync s3://update-repo/qc ./repo/
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_OUTPUT: json
 
       - uses: actions/download-artifact@v2
         name: Download build artifact
@@ -90,8 +96,7 @@ jobs:
       - name: Upload to repo
         run: aws s3 sync ./repo/ s3://update-repo/qc
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_OUTPUT: json
       
       - name: Release to Github
         uses: softprops/action-gh-release@v1
