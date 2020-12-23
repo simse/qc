@@ -103,6 +103,12 @@ jobs:
         run: aws s3 sync ./repo/ s3://update-repo/qc
         env:
           AWS_DEFAULT_OUTPUT: json
+
+      - name: Invalidate repo cache
+        run: aws cloudfront create-invalidation --distribution-id "E39E479HL1DLF7" --paths "qc/manifest.json" "qc/${VERSION}"
+        env:
+          VERSION: ${{ steps.get_version.outputs.VERSION }}
+          AWS_DEFAULT_OUTPUT: json
       
       - name: Release to Github
         uses: softprops/action-gh-release@v1
