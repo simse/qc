@@ -56,6 +56,9 @@ jobs:
     needs: build
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
