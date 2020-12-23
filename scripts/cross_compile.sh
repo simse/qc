@@ -16,7 +16,7 @@ do
         output_name+='.exe'
     fi
 
-    env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name -ldflags "-X github.com/simse/qc/cmd.Version=${VERSION}" main.go
+    env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name -ldflags "-X github.com/simse/qc/internal/update.Version=${VERSION}" main.go
 
     # Generate checksum
     sha256sum $output_name >> $output_name'.sum'

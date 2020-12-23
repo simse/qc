@@ -15,7 +15,7 @@ func Info() format.Info {
 		Aliases:   []string{},
 		HumanName: "webp",
 		Library:   "native",
-		//Encoder:          Encode,
+		// Encoder:          Encode,
 		Decoder:          Decode,
 		EncoderAvailable: false,
 		DecoderAvailable: true,
@@ -36,7 +36,7 @@ func Decode(reader io.Reader) (format.DecodeOutput, error) {
 
 /*
 // Encode converts a generic image object to a PNG file
-func Encode(writer io.Writer, decodeObject format.DecodeOutput) format.EncodeOutput {
-	return format.EncodeOutput{}
+func Encode(writer io.Writer, decodeObject format.DecodeOutput) (format.EncodeOutput, error) {
+	return format.EncodeOutput{}, nil
 }
 */

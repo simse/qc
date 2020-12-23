@@ -7,6 +7,10 @@ cp -R build/* repo/$VERSION/
 # Generate patches
 echo "Generating binary patches for past versions..."
 for d in repo/* ; do
+    if [ $d = "repo/manifest.json" ]; then
+        continue
+    fi
+
     version_split=(${d//\// })
     folder_version=${version_split[-1]}
 
