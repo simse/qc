@@ -1,12 +1,8 @@
 package cmd
 
 import (
-	"os"
+	"fmt"
 
-	"github.com/equinox-io/equinox"
-	"github.com/gernest/wow"
-	"github.com/gernest/wow/spin"
-	"github.com/simse/qc/internal/update"
 	"github.com/spf13/cobra"
 )
 
@@ -19,7 +15,7 @@ var updateCmd = &cobra.Command{
 	Short: "Updates qc to the latest version",
 	Long:  `Updates qc to the latest version`,
 	Run: func(cmd *cobra.Command, args []string) {
-		w := wow.New(os.Stdout, spin.Get(spin.Dots), " Updating qc...")
+		/*w := wow.New(os.Stdout, spin.Get(spin.Dots), " Updating qc...")
 		w.Start()
 
 		// Perform update
@@ -31,6 +27,8 @@ var updateCmd = &cobra.Command{
 			w.PersistWith(spin.Spinner{Frames: []string{"👍"}}, " qc updated to latest version")
 		} else {
 			w.PersistWith(spin.Spinner{Frames: []string{"👍"}}, " Error while updating qc")
-		}
+		}*/
+
+		fmt.Println("Sorry, this version does not support self-updating.")
 	},
 }
