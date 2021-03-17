@@ -20,6 +20,14 @@ import (
 	"github.com/spf13/cobra"
 )
 
+// ConvertCommand is a generic struct containing all mandatory and optional inputs for a convert job
+type ConvertCommand struct {
+	Directory string
+	RecursiveScan string
+	InputExtensions []string
+	OutputExtension string
+}
+
 // Input stores input extension flag
 var Input string
 

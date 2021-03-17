@@ -105,7 +105,7 @@ jobs:
           AWS_DEFAULT_OUTPUT: json
 
       - name: Invalidate repo cache
-        run: aws cloudfront create-invalidation --distribution-id "E39E479HL1DLF7" --paths "qc/manifest.json"
+        run: aws cloudfront create-invalidation --distribution-id "E39E479HL1DLF7" --paths "/qc/manifest.json"
         env:
           VERSION: ${{ steps.get_version.outputs.VERSION }}
           AWS_DEFAULT_OUTPUT: json

@@ -77,7 +77,7 @@ module.exports = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} qc`,
+      copyright: `Made with love by <a https="https://simse.io">Simon</a>`,
     },
   },
   presets: [
