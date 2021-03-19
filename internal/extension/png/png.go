@@ -10,19 +10,19 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension:        "png",
-		Aliases:          []string{},
-		HumanName:        "png",
-		Library:          "native",
-		Encoder:          Encode,
+		Extension: "png",
+		Aliases:   []string{},
+		HumanName: "png",
+		Library:   "libvips",
+		//Encoder:          Encode,
 		Decoder:          Decode,
-		EncoderAvailable: true,
+		EncoderAvailable: false,
 		DecoderAvailable: true,
 	}
 }
 
 // Decode converts the PNG image to a generic image object for encoding
-func Decode(reader io.Reader) (format.DecodeOutput, error) {
+func Decode(reader io.Reader) (interface{}, error) {
 	imageObject, _ := fastpng.Decode(reader)
 
 	return format.DecodeOutput{
@@ -30,15 +30,17 @@ func Decode(reader io.Reader) (format.DecodeOutput, error) {
 	}, nil
 }
 
+/*
 // Encode converts a generic image object to a PNG file
-func Encode(writer io.Writer, decodeObject format.DecodeOutput) (format.EncodeOutput, error) {
-	pngEncoder := fastpng.Encoder{
-		CompressionLevel: fastpng.BestSpeed,
-	}
+func Encode(writer io.Writer, decodeObject interface{}) (interface{}, error) {
+	image := decodeObject.(*bimg.Image)
 
-	writeError := pngEncoder.Encode(writer, decodeObject.Image)
+	newImage, convertError := image.Convert(bimg.PNG)
+
+	writer.Write(newImage)
 
 	return format.EncodeOutput{
-		Status: writeError == nil,
+		Status: convertError == nil,
 	}, nil
 }
+*/

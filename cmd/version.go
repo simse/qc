@@ -15,7 +15,7 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 
 	if update.Version == "" {
-		update.Version = "good question"
+		update.Version = "dev"
 	}
 }
 

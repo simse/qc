@@ -16,9 +16,9 @@ func Info() format.Info {
 		HumanName: "webp",
 		Library:   "native",
 		// Encoder:          Encode,
-		Decoder:          Decode,
+		//Decoder:          Decode,
 		EncoderAvailable: false,
-		DecoderAvailable: true,
+		DecoderAvailable: false,
 	}
 }
 

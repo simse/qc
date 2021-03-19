@@ -100,6 +100,18 @@ func PrepareAll(files []source.File, outputFormat format.Info) []Conversion {
 	return conversions
 }
 
+// Prepare will set up a conversion job given file and output format
+func Prepare(file source.File, outputFormat format.Info) Conversion {
+	inputFormat, _, _ := strategy.GetFormat(file.Extension)
+
+	return Conversion{
+		InputPath:    file.Path,
+		OutputPath:   NewPath(file.Path, inputFormat, outputFormat),
+		InputFormat:  inputFormat,
+		OutputFormat: outputFormat,
+	}
+}
+
 // NewPath creates a new path for a file after conversion
 func NewPath(filePath string, inputFormat format.Info, outputFormat format.Info) string {
 	extension := source.GetExtension(filePath, false)

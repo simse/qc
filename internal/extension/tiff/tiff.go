@@ -10,14 +10,14 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension:        "tiff",
-		Aliases:          []string{"tif"},
-		HumanName:        "tiff",
-		Library:          "native",
-		Encoder:          Encode,
-		Decoder:          Decode,
-		EncoderAvailable: true,
-		DecoderAvailable: true,
+		Extension: "tiff",
+		Aliases:   []string{"tif"},
+		HumanName: "tiff",
+		Library:   "native",
+		//Encoder:          Encode,
+		//Decoder:          Decode,
+		EncoderAvailable: false,
+		DecoderAvailable: false,
 	}
 }
 

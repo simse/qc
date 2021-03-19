@@ -1,7 +1,6 @@
 package source
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -9,18 +8,19 @@ import (
 )
 
 // Scan returns all files in directory
-func Scan(root string, recursive bool, filter []string) ([]File, error) {
-	var files []File
+func Scan(root string, recursive bool, filter []string, filesChannel chan File) error {
+	files := make(chan File)
 	var fileError error
-	var filteredFiles []File
 
 	if recursive {
-		files, fileError = scanRecursively(root)
+		go func() { fileError = scanRecursively(root, files) }()
 	} else {
-		files, fileError = scanNonRecursively(root)
+		go func() { fileError = scanNonRecursively(root, files) }()
 	}
 
-	for _, file := range files {
+	// Listen for files sent on channel
+	for file := range files {
+		// Filter files according to filter
 		for _, extension := range filter {
 			if extension[0] == '-' {
 				if trimFirstRune(extension) == file.Extension {
@@ -29,21 +29,21 @@ func Scan(root string, recursive bool, filter []string) ([]File, error) {
 			}
 
 			if extension == file.Extension || filter[0] == "*" {
-				filteredFiles = append(filteredFiles, file)
+				filesChannel <- file
 			}
 		}
 	}
 
-	return filteredFiles, fileError
+	close(filesChannel)
+
+	return fileError
 }
 
-func scanNonRecursively(root string) ([]File, error) {
-	var files []File
-
+func scanNonRecursively(root string, filesChannel chan File) error {
 	fileArray, scanError := ioutil.ReadDir(root)
 
 	if scanError != nil {
-		return files, scanError
+		return scanError
 	}
 
 	//workdir, _ := os.Getwd()
@@ -51,33 +51,30 @@ func scanNonRecursively(root string) ([]File, error) {
 
 	for _, f := range fileArray {
 		if !f.IsDir() {
-			files = append(files, File{
+			filesChannel <- File{
 				Path:      filepath.Join(root, f.Name()),
 				Extension: GetExtension(f.Name(), true),
 				Key:       filepath.Base(f.Name()),
-			})
+			}
 		}
 	}
 
-	return files, nil
+	close(filesChannel)
+
+	return nil
 }
 
-func scanRecursively(root string) ([]File, error) {
-	var files []File
-
-	//workdir, _ := os.Getwd()
-	//fullPath := filepath.Join(workdir, root)
-
+func scanRecursively(root string, filesChannel chan File) error {
 	err := filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() {
 			return nil
 		}
 
-		files = append(files, File{
+		filesChannel <- File{
 			Path:      filepath.Join(root, info.Name()),
 			Extension: GetExtension(info.Name(), true),
 			Key:       filepath.Base(path),
-		})
+		}
 
 		return nil
 	})
@@ -86,11 +83,8 @@ func scanRecursively(root string) ([]File, error) {
 		panic(err)
 	}
 
-	for _, file := range files {
-		fmt.Println(file)
-	}
-
-	return files, nil
+	close(filesChannel)
+	return nil
 }
 
 // GetExtension returns file extension given just file name or full path.

@@ -10,12 +10,12 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension:        "json",
-		Aliases:          []string{},
-		HumanName:        "JSON",
-		Library:          "native",
-		Encoder:          Encode,
-		Decoder:          Decode,
+		Extension: "json",
+		Aliases:   []string{},
+		HumanName: "JSON",
+		Library:   "native",
+		//Encoder:          Encode,
+		//Decoder:          Decode,
 		EncoderAvailable: true,
 		DecoderAvailable: true,
 	}

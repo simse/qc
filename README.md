@@ -42,4 +42,4 @@ You can also check with `qc formats`
 - PNG
 - Webp
 - TIFF
-- BMP
+- HEIF
