@@ -26,6 +26,7 @@ type ConvertCommand struct {
 	RecursiveScan   bool
 	InputExtensions []string
 	OutputExtension string
+	Continue        bool
 }
 
 // Input stores input extension flag
@@ -48,6 +49,10 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// Parse args and flags
 		commandInput := HandleCommandInput(args)
+
+		if !commandInput.Continue {
+			return
+		}
 
 		/*
 			// Print out standardised command
@@ -206,7 +211,9 @@ func HandleCommandInput(args []string) ConvertCommand {
 
 			if formatError != nil {
 				output.Error("Unknown input format: " + inputExtension)
-				return ConvertCommand{}
+				return ConvertCommand{
+					Continue: false,
+				}
 			}
 
 			// Add format aliases
@@ -218,7 +225,9 @@ func HandleCommandInput(args []string) ConvertCommand {
 	// Check cutput format is known
 	if len(args) == 0 && Output == "" {
 		output.Error("No output format given, cannot convert to nothing")
-		return ConvertCommand{}
+		return ConvertCommand{
+			Continue: false,
+		}
 	}
 
 	var outputFormatString string
@@ -230,7 +239,9 @@ func HandleCommandInput(args []string) ConvertCommand {
 
 	if !strategy.KnownExtension(Output) && !strategy.KnownExtension(args[0]) {
 		output.Error("Unknown output format: " + outputFormatString)
-		return ConvertCommand{}
+		return ConvertCommand{
+			Continue: false,
+		}
 	}
 
 	// Check output format can be encoded
@@ -238,7 +249,9 @@ func HandleCommandInput(args []string) ConvertCommand {
 
 	if !outputFormat.EncoderAvailable {
 		output.Error("Cannot convert to format: " + outputFormatString + ", no encoder available")
-		return ConvertCommand{}
+		return ConvertCommand{
+			Continue: false,
+		}
 	}
 
 	outputFormat, _, formatError := strategy.GetFormat(outputFormatString)
@@ -262,5 +275,6 @@ func HandleCommandInput(args []string) ConvertCommand {
 		InputExtensions: inputExtensions,
 		OutputExtension: outputFormatString,
 		RecursiveScan:   Recursive,
+		Continue:        true,
 	}
 }
