@@ -1,6 +1,7 @@
 package png
 
 import (
+	"image"
 	"io"
 
 	fastpng "github.com/amarburg/go-fast-png"
@@ -10,13 +11,13 @@ import (
 // Info returns an Info struct about this format
 func Info() format.Info {
 	return format.Info{
-		Extension: "png",
-		Aliases:   []string{},
-		HumanName: "png",
-		Library:   "libvips",
-		//Encoder:          Encode,
+		Extension:        "png",
+		Aliases:          []string{},
+		HumanName:        "png",
+		Library:          "fastpng",
+		Encoder:          Encode,
 		Decoder:          Decode,
-		EncoderAvailable: false,
+		EncoderAvailable: true,
 		DecoderAvailable: true,
 	}
 }
@@ -30,17 +31,16 @@ func Decode(reader io.Reader) (interface{}, error) {
 	}, nil
 }
 
-/*
 // Encode converts a generic image object to a PNG file
 func Encode(writer io.Writer, decodeObject interface{}) (interface{}, error) {
-	image := decodeObject.(*bimg.Image)
+	image := decodeObject.(image.Image)
+	encoder := fastpng.Encoder{
+		CompressionLevel: fastpng.BestSpeed,
+	}
 
-	newImage, convertError := image.Convert(bimg.PNG)
-
-	writer.Write(newImage)
+	convertError := encoder.Encode(writer, image)
 
 	return format.EncodeOutput{
 		Status: convertError == nil,
 	}, nil
 }
-*/

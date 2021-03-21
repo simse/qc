@@ -84,46 +84,49 @@ var rootCmd = &cobra.Command{
 		conversionsStarted := 0
 		resultsProcessed := 0
 
-		// Preapre spinner with default text
-		spinner := wow.New(os.Stdout, spin.Get(spin.Line), " (0/0) Processing and converting files...")
+		// Ensure no more than X threads are running
+		maxThreads := 24
+		concurrentGoroutines := make(chan struct{}, maxThreads)
+		var wg sync.WaitGroup
 
-		// Start conversion now
+		// Set up file scan progress
+		fileScanSpinner := wow.New(os.Stdout, spin.Get(spin.Line), " Found 0 files...")
+		fileScanSpinner.Start()
+		filesFound := 0
+
+		// Start conversion for each file (received in channel from scanner)
+		for file := range files {
+			filesFound++
+
+			fileScanSpinner.Text(" Found " + fmt.Sprint(filesFound) + " files...")
+
+			wg.Add(1)
+			go func(file source.File) {
+				defer wg.Done()
+
+				// Indicate a thread has started processing
+				concurrentGoroutines <- struct{}{}
+				conversionsStarted++
+
+				// Set up and execute conversion job
+				conversionJob := convert.Prepare(file, outputFormat)
+				conversionResults <- convert.Do(conversionJob)
+
+				// Indicate thread is done
+				<-concurrentGoroutines
+			}(file)
+		}
+		fileScanSpinner.Stop()
+		output.Success("Found " + fmt.Sprint(filesFound) + " files")
+
+		// When all conversions are done, close channel so program can display stats and exit
 		go func() {
-			// Set up wait group so channel is only closed when all conversions are done
-			wg := sync.WaitGroup{}
-
-			// Ensure no more than X threads are running
-			threadsAlive := 0
-			maxThreads := 24
-
-			// Start conversion for each file (received in channel from scanner)
-			for file := range files {
-				// Ensure no more than maximum threads running
-				if threadsAlive <= maxThreads {
-					threadsAlive++
-					wg.Add(1)
-					conversionsStarted++
-
-					// Output updated spinner stats
-					spinner.Text(" (" + fmt.Sprint(resultsProcessed) + "/" + fmt.Sprint(conversionsStarted) + ") Processing and converting files...")
-
-					// In a seperate go routine, do conversion (so new files can be queued instantly)
-					go func(file source.File) {
-						defer wg.Done()
-
-						conversionJob := convert.Prepare(file, outputFormat)
-						conversionResults <- convert.Do(conversionJob)
-
-						// Indicate thread is done
-						threadsAlive--
-					}(file)
-				}
-			}
-
-			// Wait for all conversions before closing results channel
 			wg.Wait()
 			close(conversionResults)
 		}()
+
+		// Preapre spinner with default text
+		spinner := wow.New(os.Stdout, spin.Get(spin.Line), " (0/"+fmt.Sprint(filesFound)+") Processing and converting files...")
 
 		// Show spinner in terminal
 		spinner.Start()
@@ -138,7 +141,7 @@ var rootCmd = &cobra.Command{
 		for conversionResult := range conversionResults {
 			resultsProcessed++
 
-			spinner.Text(" (" + fmt.Sprint(resultsProcessed) + "/" + fmt.Sprint(conversionsStarted) + ") Processing and converting files...")
+			spinner.Text(" (" + fmt.Sprint(resultsProcessed) + "/" + fmt.Sprint(filesFound) + ") Processing and converting files...")
 
 			if conversionResult.Skipped {
 				skipped++
