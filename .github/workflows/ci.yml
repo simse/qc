@@ -16,7 +16,7 @@ jobs:
           go-version: "^1.16"
 
       - name: Run tests
-        run: go test ./test
+        run: go test
 
   build:
     name: Build binary
@@ -59,56 +59,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.8"
-
-      - name: Install bsdiff
-        run: sudo apt-get install bsdiff
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
-
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Download repo
-        run: aws s3 sync s3://update-repo/qc ./repo/
-        env:
-          AWS_DEFAULT_OUTPUT: json
 
       - uses: actions/download-artifact@v2
         name: Download build artifact
         with:
           name: qc
           path: build/
-
-      - name: Add binaries to repo
-        run: bash scripts/add_to_repo.sh
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-
-      - name: Generate repo manifest
-        run: python scripts/generate_repo_manifest.py
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-
-      - name: Upload to repo
-        run: aws s3 sync ./repo/ s3://update-repo/qc
-        env:
-          AWS_DEFAULT_OUTPUT: json
-
-      - name: Invalidate repo cache
-        run: aws cloudfront create-invalidation --distribution-id "E39E479HL1DLF7" --paths "/qc/manifest.json"
-        env:
-          VERSION: ${{ steps.get_version.outputs.VERSION }}
-          AWS_DEFAULT_OUTPUT: json
       
       - name: Release to Github
         uses: softprops/action-gh-release@v1
@@ -116,7 +75,9 @@ jobs:
           prerelease: false
           files: |
             build/qc-linux-amd64
+            build/qc-linux-arm64
             build/qc-darwin-amd64
+            build/qc/darwin-arm64
             build/qc-windows-amd64.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

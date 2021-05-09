@@ -2,7 +2,7 @@ package="github.com/simse/qc"
 package_split=(${package//\// })
 package_name=${package_split[-1]}
 
-platforms=("windows/amd64" "darwin/amd64" "linux/amd64")
+platforms=("windows/amd64" "darwin/amd64" "linux/amd64" "linux/arm64" "darwin/arm64")
 
 for platform in "${platforms[@]}"
 do
@@ -18,8 +18,10 @@ do
 
     env GOOS=$GOOS GOARCH=$GOARCH go build -o $output_name -ldflags "-X github.com/simse/qc/internal/update.Version=${VERSION}" main.go
 
+    echo 'Compiled' $output_name
+
     # Generate checksum
-    sha256sum $output_name >> $output_name'.sum'
+    # sha256sum $output_name >> $output_name'.sum'
 
     if [ $? -ne 0 ]; then
         echo 'An error has occurred! Aborting the script execution...'

@@ -1,45 +1,29 @@
 # qc
-![CI](https://github.com/simse/qc/workflows/CI/badge.svg)
 
-A blazing fast, file format conversion CLI tool
+qc, short for Quick Convert, is a tool for converting between file formats.
 
-**WARNING: qc is not yet released. There may be pre-releases available, but it may not work or break at any point.**
+## Installation
 
+Use the following script to install the latest version
 
-## Examples
-**Convert all files to png**
+```bash
+curl bhjshjhd | sudo bash
+```
 
-`qc png`
+## Usage
+Go to any folder and type
 
-which is an alias of `qc --in * --out png`
+```bash
+qc jpg
+```
+or pick some other format and watch the magic happen.
 
+## Contributing
+Pull requests are welcome. For major changes, please create a discussion first to discuss what you would like to change.
 
-**Convert all jpg files to png**
+Please make sure to update tests as appropriate.
 
-`qc --in jpg --out png`
+## License
+[GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
 
-
-**Convert all ttf files to otf, including subdirectories**
-
-`qc --in ttf --out otf --recursive`
-
-
-## Install
-### Windows
-
-Use choco or something
-
-### Linux/macOS
-
-Use homebrew!
-
-
-## Supported formats
-You can also check with `qc formats`
-
-### Images
-- JPG
-- PNG
-- Webp
-- TIFF
-- HEIF
+Do anything you want, **except redistributing closed-sourced versions**. 

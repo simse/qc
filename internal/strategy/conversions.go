@@ -3,7 +3,6 @@ package strategy
 import (
 	"errors"
 
-	"github.com/simse/qc/internal/extension/heif"
 	"github.com/simse/qc/internal/extension/jpg"
 	"github.com/simse/qc/internal/extension/png"
 	"github.com/simse/qc/internal/format"
@@ -27,7 +26,6 @@ func init() {
 			Formats: []format.Info{
 				jpg.Info(),
 				png.Info(),
-				heif.Info(),
 				//webp.Info(),
 				//bmp.Info(),
 				//tiff.Info(),

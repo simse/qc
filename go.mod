@@ -8,7 +8,6 @@ require (
 	github.com/gernest/wow v0.1.0
 	github.com/inconshreveable/go-update v0.0.0-20160112193335-8152e7eb6ccf
 	github.com/klauspost/compress v1.11.12 // indirect
-	github.com/simse/go-heif v0.0.0-20210319203038-5b10eabf47f8
 	github.com/spf13/cobra v1.1.3
 	golang.org/x/crypto v0.0.0-20210317152858-513c2a44f670 // indirect
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb
