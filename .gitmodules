@@ -1,3 +1,0 @@
-[submodule "qc-examples"]
-	path = examples
-	url = git@github.com:simse/qc-examples.git
