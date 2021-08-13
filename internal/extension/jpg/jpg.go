@@ -24,8 +24,11 @@ func Info() format.Info {
 
 // Decode converts the JPG image to a generic image object for encoding
 func Decode(reader io.Reader) (interface{}, error) {
-	imageObject, _ := jpeg.Decode(reader)
-	// panic(err)
+	imageObject, decodeError := jpeg.Decode(reader)
+
+	if decodeError != nil {
+		return nil, decodeError
+	}
 
 	return imageObject, nil
 }

@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"strings"
 	"sync"
+	"syscall"
 	"time"
 
 	"github.com/gernest/wow"
@@ -47,6 +49,17 @@ var rootCmd = &cobra.Command{
 	Long:  `qc (QuickConvert) can convert file formats quickly and easily.`,
 	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
+		// Set interrupt
+		sigs := make(chan os.Signal, 1)
+		signal.Notify(sigs, syscall.SIGINT, syscall.SIGTERM)
+
+		go func() {
+			sig := <-sigs
+			fmt.Println()
+			fmt.Println(sig)
+			os.Exit(0)
+		}()
+
 		// Parse args and flags
 		commandInput := HandleCommandInput(args)
 
@@ -160,8 +173,8 @@ var rootCmd = &cobra.Command{
 			}
 		}
 
-		spinner.Persist()
-		fmt.Print("\n")
+		// spinner.Persist()
+		fmt.Print("\n\n")
 
 		// Stop conversion timer
 		elapsed := time.Since(conversionStart)

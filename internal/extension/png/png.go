@@ -26,9 +26,7 @@ func Info() format.Info {
 func Decode(reader io.Reader) (interface{}, error) {
 	imageObject, _ := fastpng.Decode(reader)
 
-	return format.DecodeOutput{
-		Image: imageObject,
-	}, nil
+	return imageObject, nil
 }
 
 // Encode converts a generic image object to a PNG file

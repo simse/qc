@@ -8,6 +8,7 @@ const typography = new Typography({
     "Consolas",
   ],
   bodyFontFamily: ["Inter", "sans-serif"],
+  includeNormalize: true
 })
 
 export default typography

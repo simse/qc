@@ -17,8 +17,22 @@
 }
 
 @font-face {
-    font-family: "Mono Lisa";
-    src: url("../fonts/MonoLisa-Regular.woff2") format("woff2");
+    font-family: "IBM Plex Mono";
+    src: url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    src: url("../fonts/IBMPlexMono-Light.woff2") format("woff2");
+    font-weight: 300;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Recoleta";
+    src: url("../fonts/Recoleta-Regular.woff") format("woff");
     font-weight: 400;
     font-display: swap;
 }

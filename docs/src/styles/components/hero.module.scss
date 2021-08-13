@@ -1,0 +1,117 @@
+.hero {
+    color: #fff;
+    //min-height: 600px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.innerBox {
+    min-height: 800px;
+    display: flex;
+    align-items: center;
+    //flex-direction: column;
+
+    &:first-child {
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+    }
+}
+
+.text {
+    padding-right: 40px;
+
+    h1 {
+        font-family: "Recoleta";
+        font-weight: 400;
+        font-size: 2.6rem;
+
+        &.colored {
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to bottom right, #b54ff3, #4f46e5);
+            margin-bottom: 15px;
+        }
+    }
+
+    p {
+        color: rgb(148, 163, 184);
+    }
+
+    button {
+        outline: 0;
+        border: 0;
+        width: auto;
+        padding: 6px 18px;
+        border-radius: 80px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: rgb(139, 92, 246);
+        transition: cubic-bezier(0.39, 0.575, 0.565, 1) 200ms all;
+
+        &:hover {
+            cursor: pointer;
+            color: rgb(16, 185, 129);
+        }
+    }
+}
+
+.demo {
+    padding-left: 140px;
+    padding-bottom: 66px;
+    
+    code {
+        font-family: "IBM Plex Mono";
+        font-size: 1.1rem;
+        // font-weight: 400;
+
+        span.prompt {
+            color: rgb(16, 185, 129);
+        }
+
+        span.comment {
+            color: rgb(148, 163, 184);
+        }
+
+        span.arg {
+            color: rgb(139, 92, 246);
+        }
+    }
+}
+
+.code-section {
+    margin-bottom: 20px;
+}
+
+.os-select {
+    display: flex;
+    margin-bottom: 32px;
+
+    button {
+        padding: 4px 12px;
+        outline: 0;
+        border: 0;
+        border-radius: 80px;
+        margin-right: 14px;
+        font-size: 0.8rem;
+        background: lighten(rgba(15,23,42, 1), 8%);
+        color: #ddd;
+        transition: cubic-bezier(0.39, 0.575, 0.565, 1) 200ms all;
+
+        &.active {
+            background: lighten(rgba(15,23,42, 1), 16%);
+            color: #fff;
+        }
+
+        &:hover {
+            background: lighten(rgba(15,23,42, 1), 14%);
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+}
