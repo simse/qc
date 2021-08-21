@@ -43,7 +43,7 @@ jobs:
       - run: mkdir build
 
       - name: Build for linux amd64 (for now)
-        run: go run build.go --output build/qc-linux-amd64
+        run: go run build.go --output build/qc-linux-amd64 --enable-cgo
 
       - uses: actions/upload-artifact@v2
         with:
