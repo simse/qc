@@ -83,4 +83,13 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get_version.outputs.VERSION }}
+
+      - name: Release Homebrew Formula
+        uses: garden-io/update-homebrew-action@v1
+        with:
+          packageName: 'qc'
+          templatePath: 'qc-template.rb'
+          tapRepo: 'simse/homebrew-tap'
+          srcRepo: 'simse/qc'
+          authToken: ${{ secrets.GITHUB_TOKEN }}
      
