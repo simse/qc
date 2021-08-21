@@ -16,11 +16,12 @@ import (
 	"github.com/simse/qc/internal/convert"
 	"github.com/simse/qc/internal/output"
 	"github.com/simse/qc/internal/strategy"
-	"github.com/simse/qc/internal/update"
 
 	"github.com/simse/qc/internal/source"
 	"github.com/spf13/cobra"
 )
+
+var version string
 
 // ConvertCommand is a generic struct containing all mandatory and optional inputs for a convert job
 type ConvertCommand struct {
@@ -204,7 +205,7 @@ func init() {
 // Execute handles the root command, i.e. just `qc` with no provided subcommand
 func Execute() {
 	// Print version
-	fmt.Printf("qc %s\n\n", update.Version)
+	fmt.Printf("qc %s \n\n", version)
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
