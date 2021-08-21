@@ -21,7 +21,7 @@ jobs:
   build:
     name: Build binary
     runs-on: ubuntu-20.04
-    needs: test_source_code
+    # needs: test_source_code
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
