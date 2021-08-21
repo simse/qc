@@ -1,18 +1,10 @@
-package cmd
-
-import (
-	"os"
-
-	"github.com/gernest/wow"
-	"github.com/gernest/wow/spin"
-	"github.com/simse/qc/internal/update"
-	"github.com/spf13/cobra"
-)
+package main
 
 func init() {
-	rootCmd.AddCommand(updateCmd)
+	//rootCmd.AddCommand(updateCmd)
 }
 
+/*
 var updateCmd = &cobra.Command{
 	Use:   "update",
 	Short: "Updates qc to the latest version",
@@ -33,3 +25,4 @@ var updateCmd = &cobra.Command{
 		}
 	},
 }
+*/
