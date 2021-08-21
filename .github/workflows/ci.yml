@@ -31,6 +31,11 @@ jobs:
         with:
           go-version: "^1.16"
 
+      - run: sudo add-apt-repository -y ppa:strukturag/libde265
+      - run: sudo add-apt-repository -y ppa:strukturag/libheif
+      - run: sudo add-apt-repository ppa:tonimelisma/ppa
+      - run: sudo apt -y install libvips-dev
+
       - name: Get the version
         id: get_version
         run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
