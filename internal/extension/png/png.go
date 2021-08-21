@@ -1,10 +1,9 @@
 package png
 
 import (
-	"image"
 	"io"
 
-	fastpng "github.com/amarburg/go-fast-png"
+	"github.com/davidbyttow/govips/v2/vips"
 	"github.com/simse/qc/internal/format"
 )
 
@@ -14,7 +13,7 @@ func Info() format.Info {
 		Extension:        "png",
 		Aliases:          []string{},
 		HumanName:        "png",
-		Library:          "fastpng",
+		Library:          "libvips",
 		Encoder:          Encode,
 		Decoder:          Decode,
 		EncoderAvailable: true,
@@ -24,19 +23,26 @@ func Info() format.Info {
 
 // Decode converts the PNG image to a generic image object for encoding
 func Decode(reader io.Reader) (interface{}, error) {
-	imageObject, _ := fastpng.Decode(reader)
+	imageObject, decodeError := vips.NewImageFromReader(reader)
+
+	if decodeError != nil {
+		return nil, decodeError
+	}
 
 	return imageObject, nil
 }
 
 // Encode converts a generic image object to a PNG file
 func Encode(writer io.Writer, decodeObject interface{}) (interface{}, error) {
-	image := decodeObject.(image.Image)
-	encoder := fastpng.Encoder{
-		CompressionLevel: fastpng.BestSpeed,
+	exportParameters := vips.PngExportParams{
+		StripMetadata: true,
+		Compression:   5,
+		Interlace:     false,
 	}
 
-	convertError := encoder.Encode(writer, image)
+	pngImage, _, convertError := decodeObject.(*vips.ImageRef).ExportPng(&exportParameters)
+
+	writer.Write(pngImage)
 
 	return format.EncodeOutput{
 		Status: convertError == nil,

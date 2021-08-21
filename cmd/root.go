@@ -87,7 +87,8 @@ var rootCmd = &cobra.Command{
 		}()
 
 		// Fetch output format
-		outputFormat, _, _ := strategy.GetFormat(commandInput.OutputExtension)
+		outputFormat, group, _ := strategy.GetFormat(commandInput.OutputExtension)
+		group.Setup()
 
 		// Start convert timer
 		conversionStart := time.Now()

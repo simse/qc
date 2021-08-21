@@ -1,10 +1,9 @@
 package jpg
 
 import (
-	"image"
-	"image/jpeg"
 	"io"
 
+	"github.com/davidbyttow/govips/v2/vips"
 	"github.com/simse/qc/internal/format"
 )
 
@@ -14,7 +13,7 @@ func Info() format.Info {
 		Extension:        "jpg",
 		Aliases:          []string{"jpeg"},
 		HumanName:        "jpg",
-		Library:          "native",
+		Library:          "libvips",
 		Encoder:          Encode,
 		Decoder:          Decode,
 		EncoderAvailable: true,
@@ -24,7 +23,7 @@ func Info() format.Info {
 
 // Decode converts the JPG image to a generic image object for encoding
 func Decode(reader io.Reader) (interface{}, error) {
-	imageObject, decodeError := jpeg.Decode(reader)
+	imageObject, decodeError := vips.NewImageFromReader(reader)
 
 	if decodeError != nil {
 		return nil, decodeError
@@ -34,12 +33,15 @@ func Decode(reader io.Reader) (interface{}, error) {
 }
 
 // Encode converts a generic image object to a JPG file
-func Encode(writer io.Writer, decodeInfo interface{}) (interface{}, error) {
-	image := decodeInfo.(image.Image)
+func Encode(writer io.Writer, decodeObject interface{}) (interface{}, error) {
+	exportParameters := vips.JpegExportParams{
+		StripMetadata: true,
+		Quality:       7,
+		Interlace:     false,
+	}
+	jpgImage, _, convertError := decodeObject.(*vips.ImageRef).ExportJpeg(&exportParameters)
 
-	convertError := jpeg.Encode(writer, image, &jpeg.Options{
-		Quality: 90,
-	})
+	writer.Write(jpgImage)
 
 	return format.EncodeOutput{
 		Status: convertError == nil,

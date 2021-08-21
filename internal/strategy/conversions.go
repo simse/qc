@@ -6,12 +6,15 @@ import (
 	"github.com/simse/qc/internal/extension/jpg"
 	"github.com/simse/qc/internal/extension/png"
 	"github.com/simse/qc/internal/format"
+	"github.com/simse/qc/internal/strategy/images"
 )
 
 // ConversionGroup represents a group of inter-convertible formats
 type ConversionGroup struct {
 	FormatType string
 	Formats    []format.Info
+	Check      func() bool // Check for any dependencies before trying to use them
+	Setup      func() bool // Setup things like libvips
 }
 
 // ConversionGroups contains all groups of formats that can be converted between
@@ -27,6 +30,8 @@ func init() {
 				jpg.Info(),
 				png.Info(),
 			},
+			Check: images.Check,
+			Setup: images.Setup,
 		},
 
 		// TODO: Fonts
