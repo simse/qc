@@ -3,10 +3,8 @@ package strategy
 import (
 	"errors"
 
-	"github.com/simse/qc/internal/extension/bmp"
 	"github.com/simse/qc/internal/extension/jpg"
 	"github.com/simse/qc/internal/extension/png"
-	"github.com/simse/qc/internal/extension/tiff"
 	"github.com/simse/qc/internal/format"
 )
 
@@ -28,8 +26,6 @@ func init() {
 			Formats: []format.Info{
 				jpg.Info(),
 				png.Info(),
-				bmp.Info(),
-				tiff.Info(),
 			},
 		},
 
