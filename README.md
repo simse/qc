@@ -4,10 +4,9 @@ qc, short for Quick Convert, is a tool for converting between file formats.
 
 ## Installation
 
-Use the following script to install the latest version
-
+**Using homebrew**
 ```bash
-curl bhjshjhd | sudo bash
+brew install simse/qc
 ```
 
 ## Usage
