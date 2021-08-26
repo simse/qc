@@ -328,7 +328,7 @@ func (v GoVersion) String() string {
 
 func main() {
 	if !goVersion.AtLeast(GoVersion{1, 12, 0}) {
-		die("Go version (%v) is too old, restic requires Go >= 1.12\n", goVersion)
+		die("Go version (%v) is too old, qc requires Go >= 1.12\n", goVersion)
 	}
 
 	if !goVersion.AtLeast(config.MinVersion) {

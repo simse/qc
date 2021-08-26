@@ -88,7 +88,6 @@ func scanRecursively(root string, filesChannel chan File) error {
 }
 
 // GetExtension returns file extension given just file name or full path.
-// hey, it's a free country (maybe?) do what you want
 func GetExtension(name string, lowercase bool) string {
 	var extension string
 	if len(filepath.Ext(name)) < 1 {

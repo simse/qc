@@ -3,9 +3,9 @@ package strategy
 import (
 	"errors"
 
-	"github.com/simse/qc/internal/extension/jpg"
-	"github.com/simse/qc/internal/extension/png"
 	"github.com/simse/qc/internal/format"
+	"github.com/simse/qc/internal/strategy/codecs/jpg"
+	"github.com/simse/qc/internal/strategy/codecs/png"
 	"github.com/simse/qc/internal/strategy/images"
 )
 
