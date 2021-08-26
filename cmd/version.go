@@ -1,11 +1,17 @@
 package main
 
-/*
+import (
+	"fmt"
+	"runtime"
+
+	"github.com/spf13/cobra"
+)
+
 // Version contains the qc version (filled by CI)
-var version string
+//var version string
 
 func init() {
-	// rootCmd.AddCommand(versionCmd)
+	rootCmd.AddCommand(versionCmd)
 }
 
 var versionCmd = &cobra.Command{
@@ -17,4 +23,3 @@ var versionCmd = &cobra.Command{
 			version, runtime.Version(), runtime.GOOS, runtime.GOARCH)
 	},
 }
-*/
