@@ -18,7 +18,7 @@ jobs:
   #    - name: Run tests
   #      run: go test
   
-  build:
+  build_binary:
     name: Build binary
     runs-on: ubuntu-20.04
     # needs: test_source_code
@@ -32,8 +32,11 @@ jobs:
           go-version: "^1.16"
 
       - run: sudo add-apt-repository -y ppa:strukturag/libde265
+
       - run: sudo add-apt-repository -y ppa:strukturag/libheif
+
       - run: sudo add-apt-repository ppa:tonimelisma/ppa
+      
       - run: sudo apt -y install libvips-dev
 
       - name: Get the version
@@ -49,14 +52,15 @@ jobs:
         with:
           name: qc
           path: build/
+    
 
   # test_binary:
   #   name: Test binary
   #   runs-on: ubuntu-20.04
       
 
-  release:
-    name: Release qc
+  release_github:
+    name: Release to Github
     runs-on: ubuntu-20.04
     needs: build
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
@@ -83,7 +87,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION: ${{ steps.get_version.outputs.VERSION }}
-    
+
+
+  release_homebrew:
+    name: Release to Homebrew
+    runs-on: ubuntu-20.04
+    needs: build
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/')
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+
       - name: Update Homebrew formula
         uses: NSHipster/update-homebrew-formula-action@main
         with:
