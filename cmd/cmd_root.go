@@ -216,29 +216,6 @@ func Execute() {
 // HandleCommandInput will parse and verify command input
 func HandleCommandInput(args []string) ConvertCommand {
 	// Verify input and output format flags
-	// Get array of input formats
-	inputExtensions := strings.Split(Input, ",")
-
-	// If no input extensions where given assume wildcard
-	if Input == "" {
-		// fmt.Println("No input format given, assuming: *")
-		inputExtensions[0] = "*"
-	} else {
-		for _, inputExtension := range inputExtensions {
-			format, _, formatError := strategy.GetFormat(inputExtension)
-
-			if formatError != nil {
-				output.Error("Unknown input format: " + inputExtension)
-				return ConvertCommand{
-					Continue: false,
-				}
-			}
-
-			// Add format aliases
-			// TODO: disable with --strict
-			inputExtensions = append(inputExtensions, format.Aliases...)
-		}
-	}
 
 	// Check cutput format is known
 	if len(args) == 0 && Output == "" {
@@ -272,9 +249,33 @@ func HandleCommandInput(args []string) ConvertCommand {
 		}
 	}
 
-	outputFormat, _, formatError := strategy.GetFormat(outputFormatString)
+	outputFormat, formatGroup, formatError := strategy.GetFormat(outputFormatString)
 	if formatError != nil {
 		panic(formatError)
+	}
+
+	// Get array of input formats
+	inputExtensions := strings.Split(Input, ",")
+
+	// If no input extensions where given assume wildcard
+	if Input == "" {
+		// Instead of wildcard, get all extensions of group
+		inputExtensions = strategy.GetGroupExtensions(formatGroup, []string{outputFormatString}, true)
+	} else {
+		for _, inputExtension := range inputExtensions {
+			format, _, formatError := strategy.GetFormat(inputExtension)
+
+			if formatError != nil {
+				output.Error("Unknown input format: " + inputExtension)
+				return ConvertCommand{
+					Continue: false,
+				}
+			}
+
+			// Add format aliases
+			// TODO: disable with --strict
+			inputExtensions = append(inputExtensions, format.Aliases...)
+		}
 	}
 
 	// Find folder to look in

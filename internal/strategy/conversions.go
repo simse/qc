@@ -65,6 +65,25 @@ func GetFormat(extension string) (format.Info, ConversionGroup, error) {
 	return format.Info{}, ConversionGroup{}, errors.New("format unknown")
 }
 
+// GetGroupExtensions will return all known extensions of a group
+func GetGroupExtensions(group ConversionGroup, ignoreExtensions []string, includeAliases bool) []string {
+	extensions := []string{}
+
+	for _, formatInfo := range group.Formats {
+		if stringInSlice(formatInfo.Extension, ignoreExtensions) {
+			continue
+		}
+
+		extensions = append(extensions, formatInfo.Extension)
+
+		if includeAliases {
+			extensions = append(extensions, formatInfo.Aliases...)
+		}
+	}
+
+	return extensions
+}
+
 // VerifyConversion ensures input format can be converted to output format
 func VerifyConversion(inputFormat format.Info, outputFormat format.Info) (bool, error) {
 	_, inputFormatGroup, inputFormatError := GetFormat(inputFormat.Extension)
@@ -86,4 +105,15 @@ func VerifyConversion(inputFormat format.Info, outputFormat format.Info) (bool, 
 	}
 
 	return canConvert, nil
+}
+
+// stringInSlice checks a slice for a string
+// Taken from: https://stackoverflow.com/questions/15323767/does-go-have-if-x-in-construct-similar-to-python
+func stringInSlice(a string, list []string) bool {
+	for _, b := range list {
+		if b == a {
+			return true
+		}
+	}
+	return false
 }
