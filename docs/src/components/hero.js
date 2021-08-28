@@ -2,8 +2,20 @@ import React, { useState } from "react"
 
 import * as styles from "../styles/components/hero.module.scss"
 
+const { detect } = require('detect-browser');
+
 const Hero = () => {
-    const [scriptOS, setScriptOS] = useState("windows")
+    let guessedBrowser = "windows"
+
+    const browser = detect();
+    if (browser.os === "Mac OS") {
+        guessedBrowser = "mac"
+    } else if (browser.os === "Linux") {
+        guessedBrowser = "linux"
+    }
+
+    const [scriptOS, setScriptOS] = useState(guessedBrowser)
+    
 
     return (
         <div className={styles.hero}>
@@ -53,7 +65,7 @@ const Hero = () => {
                             <div className={styles.codeSection}>
                                 <code><span className={styles.comment}># Install qc using the terminal</span></code>
                                 <br />
-                                <code><span className={styles.prompt}>$</span> curl blah blah | bash</code>
+                                <code><span className={styles.prompt}>$</span> brew install simse/tap/qc</code>
                             </div>
                             
                             <div className={styles.codeSection}>
@@ -73,7 +85,7 @@ const Hero = () => {
                         <div className={styles.codeSection}>
                                 <code><span className={styles.comment}># Install qc using the command line</span></code>
                                 <br />
-                                <code><span className={styles.prompt}>$</span> curl blah blah | bash</code>
+                                <code><span className={styles.prompt}>$</span> brew install simse/tap/qc</code>
                             </div>
                             
                             <div className={styles.codeSection}>

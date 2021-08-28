@@ -7,7 +7,7 @@ import Hero from "../components/hero"
 
 const IndexPage = () => (
   <>
-    <SEO title="World's fastest conversion tool" />
+    <SEO title="World's fastest conversion tool" /> {/* eslint-disable-line react/jsx-pascal-case*/}
 
     <Navbar />
     
