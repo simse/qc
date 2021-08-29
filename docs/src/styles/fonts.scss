@@ -1,22 +1,4 @@
 @font-face {
-    font-family: "Inter";
-    font-weight: 100 900;
-    font-display: swap;
-    font-style: normal;
-    font-named-instance: "Regular";
-    src: url("../fonts/Inter.var.woff2") format("woff2");
-}
-
-@font-face {
-    font-family: "Inter";
-    font-weight: 100 900;
-    font-display: swap;
-    font-style: italic;
-    font-named-instance: "Italic";
-    src: url("../fonts/Inter-italic.var.woff2") format("woff2");
-}
-
-@font-face {
     font-family: "IBM Plex Mono";
     src: url("../fonts/IBMPlexMono-Regular.woff2") format("woff2");
     font-weight: 400;
@@ -31,8 +13,22 @@
 }
 
 @font-face {
-    font-family: "Recoleta";
-    src: url("../fonts/Recoleta-Regular.woff") format("woff");
+    font-family: "Alliance No. 1";
+    src: url("../fonts/Alliance-No-1-Regular.woff2") format("woff2");
     font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Alliance No. 1";
+    src: url("../fonts/Alliance-No-1-ExtraBold.woff2") format("woff2");
+    font-weight: 800;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Alliance No. 1";
+    src: url("../fonts/Alliance-No-1-Light.woff") format("woff");
+    font-weight: 300;
     font-display: swap;
 }
