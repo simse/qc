@@ -44,16 +44,18 @@
         color: rgb(148, 163, 184);
     }
 
-    button {
+    a {
         outline: 0;
         border: 0;
         width: auto;
-        padding: 6px 18px;
+        padding: 8px 22px;
         border-radius: 80px;
         font-size: 0.8rem;
         font-weight: 500;
         color: rgb(139, 92, 246);
         transition: cubic-bezier(0.39, 0.575, 0.565, 1) 200ms all;
+        background: #fff;
+        text-decoration: none;
 
         &:hover {
             cursor: pointer;

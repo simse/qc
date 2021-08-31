@@ -14,8 +14,14 @@ const InstallPage = () => (
     
     <div className={styles.install}>
       <div className={styles.inner}>
-        <h1>Install qc</h1>
-        <p>qc is <strong>easy</strong> to install on all platforms, except Windows (because it is not supported).</p>
+        <div>
+          <h1>Install qc</h1>
+          <p>qc is <strong>easy</strong> to install on all platforms, except Windows (because it is not supported).</p>
+        </div>
+
+        <div>
+          <code>brew install simse/tap/qc</code>
+        </div>
       </div>
     </div>
     

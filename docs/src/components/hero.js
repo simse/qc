@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "gatsby"
 
 import * as styles from "../styles/components/hero.module.scss"
 
@@ -34,7 +35,7 @@ class Hero extends React.Component {
 
                             <p>qc is a tool for converting between file formats. It supports tons of formats, using either native Go libraries or good ol' C libraries.</p>
                         
-                            <button>Read the docs</button>
+                            <Link to={"/install"}>Install qc now</Link>
                         </div>
                     </div>
                     

@@ -15,7 +15,13 @@ const Navbar = () => {
                 </Link>
 
                 <div className={styles.items}>
+                    <div className={styles.item}>
+                        <Link to={"/install"}>Install</Link>
+                    </div>
 
+                    <div className={styles.item}>
+                        <Link to={"/docs"}>Docs</Link>
+                    </div>
                 </div>
             </div>
         </nav>
