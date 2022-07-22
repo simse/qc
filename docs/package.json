@@ -13,7 +13,7 @@
     "gatsby-plugin-offline": "^4.11.0",
     "gatsby-plugin-react-helmet": "^4.11.0",
     "gatsby-plugin-sass": "^4.11.0",
-    "gatsby-plugin-sharp": "^3.11.0",
+    "gatsby-plugin-sharp": "^3.13.0",
     "gatsby-plugin-typography": "^3.11.0",
     "gatsby-source-filesystem": "^3.11.0",
     "gatsby-transformer-remark": "^4.9.0",
